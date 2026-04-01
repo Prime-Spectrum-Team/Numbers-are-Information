@@ -1,0 +1,148 @@
+{
+  "experiment": "EXP-2+3: Coprime Density & Sparsity 6/\u03c0\u00b2",
+  "description": "Manifesto \u00a7VI.C: \"Sparsity\" = coprime (non-resonant) pairs = 6/\u03c0\u00b2 \u2248 61%",
+  "coprime_theory": 0.6079271018540267,
+  "resonant_theory": 0.39207289814597335,
+  "exp2_results": [
+    {
+      "T": 64,
+      "coprime_count": 1259,
+      "total_pairs": 2016,
+      "empirical": 0.6245039682539683,
+      "theory": 0.6079271018540267,
+      "delta": 0.016576866399941603,
+      "abs_delta": 0.016576866399941603,
+      "time_s": 0.00011120102135464549
+    },
+    {
+      "T": 128,
+      "coprime_count": 5021,
+      "total_pairs": 8128,
+      "empirical": 0.6177411417322834,
+      "theory": 0.6079271018540267,
+      "delta": 0.009814039878256797,
+      "abs_delta": 0.009814039878256797,
+      "time_s": 0.00045534002128988504
+    },
+    {
+      "T": 256,
+      "coprime_count": 19947,
+      "total_pairs": 32640,
+      "empirical": 0.6111213235294117,
+      "theory": 0.6079271018540267,
+      "delta": 0.0031942216753850783,
+      "abs_delta": 0.0031942216753850783,
+      "time_s": 0.0018632769933901727
+    },
+    {
+      "T": 512,
+      "coprime_count": 79851,
+      "total_pairs": 130816,
+      "empirical": 0.6104069838551859,
+      "theory": 0.6079271018540267,
+      "delta": 0.002479882001159228,
+      "abs_delta": 0.002479882001159228,
+      "time_s": 0.008001777983736247
+    },
+    {
+      "T": 1024,
+      "coprime_count": 318963,
+      "total_pairs": 523776,
+      "empirical": 0.6089683376099707,
+      "theory": 0.6079271018540267,
+      "delta": 0.0010412357559440588,
+      "abs_delta": 0.0010412357559440588,
+      "time_s": 0.034589859016705304
+    },
+    {
+      "T": 2048,
+      "coprime_count": 1275585,
+      "total_pairs": 2096128,
+      "empirical": 0.6085434668111871,
+      "theory": 0.6079271018540267,
+      "delta": 0.0006163649571604424,
+      "abs_delta": 0.0006163649571604424,
+      "time_s": 0.14868533000117168
+    },
+    {
+      "T": 4096,
+      "coprime_count": 5100019,
+      "total_pairs": 8386560,
+      "empirical": 0.6081181080204517,
+      "theory": 0.6079271018540267,
+      "delta": 0.0001910061664250895,
+      "abs_delta": 0.0001910061664250895,
+      "time_s": 0.6223203099798411
+    },
+    {
+      "T": 8192,
+      "coprime_count": 20401609,
+      "total_pairs": 33550336,
+      "empirical": 0.6080895583281193,
+      "theory": 0.6079271018540267,
+      "delta": 0.00016245647409263153,
+      "abs_delta": 0.00016245647409263153,
+      "time_s": 2.571604721946642
+    }
+  ],
+  "exp2_pass": true,
+  "exp3_results": [
+    {
+      "T": 64,
+      "coprime_fraction": 0.6245039682539683,
+      "coprime_theory": 0.6079271018540267,
+      "delta": 0.016576866399941603,
+      "stable": false
+    },
+    {
+      "T": 128,
+      "coprime_fraction": 0.6177411417322834,
+      "coprime_theory": 0.6079271018540267,
+      "delta": 0.009814039878256797,
+      "stable": true
+    },
+    {
+      "T": 256,
+      "coprime_fraction": 0.6111213235294117,
+      "coprime_theory": 0.6079271018540267,
+      "delta": 0.0031942216753850783,
+      "stable": true
+    },
+    {
+      "T": 512,
+      "coprime_fraction": 0.6104069838551859,
+      "coprime_theory": 0.6079271018540267,
+      "delta": 0.002479882001159228,
+      "stable": true
+    },
+    {
+      "T": 1024,
+      "coprime_fraction": 0.6089683376099707,
+      "coprime_theory": 0.6079271018540267,
+      "delta": 0.0010412357559440588,
+      "stable": true
+    },
+    {
+      "T": 2048,
+      "coprime_fraction": 0.6085434668111871,
+      "coprime_theory": 0.6079271018540267,
+      "delta": 0.0006163649571604424,
+      "stable": true
+    },
+    {
+      "T": 4096,
+      "coprime_fraction": 0.6081181080204517,
+      "coprime_theory": 0.6079271018540267,
+      "delta": 0.0001910061664250895,
+      "stable": true
+    }
+  ],
+  "exp3_pass": true,
+  "time_seconds": 4.209775447845459,
+  "targets": [
+    "P1 \u00a7VI-C",
+    "P2 \u00a73.2",
+    "P4 \u00a73.1"
+  ],
+  "note": "EXP-3 measures coprime_fraction (gcd==1), NOT resonant fraction (gcd>1)"
+}

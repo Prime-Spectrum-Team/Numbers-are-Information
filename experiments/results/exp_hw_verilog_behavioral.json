@@ -1,0 +1,360 @@
+{
+  "experiment": "EXP-HW.VLOG: spectral_cell Behavioral Emulation",
+  "module_spec": {
+    "input_bits": 10,
+    "n_range": [
+      0,
+      1023
+    ],
+    "output_bits": 21,
+    "K": 7,
+    "basis": [
+      2,
+      3,
+      5,
+      7,
+      11,
+      13,
+      17
+    ],
+    "pipeline_stages": 1
+  },
+  "lut_init_ms": 2.12,
+  "test_results": {
+    "total": 14,
+    "passed": 14,
+    "all_pass": true
+  },
+  "test_vectors": [
+    {
+      "n": 0,
+      "expected_sa": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "got_sa": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "pass": true,
+      "description": "n=0: hardware edge case"
+    },
+    {
+      "n": 1,
+      "expected_sa": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "got_sa": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "pass": true,
+      "description": "n=1: unit S0"
+    },
+    {
+      "n": 2,
+      "expected_sa": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "got_sa": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "pass": true,
+      "description": "n=2: Dyadic S3"
+    },
+    {
+      "n": 3,
+      "expected_sa": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "got_sa": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "pass": true,
+      "description": "n=3: Triadic S4"
+    },
+    {
+      "n": 5,
+      "expected_sa": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "got_sa": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "pass": true,
+      "description": "n=5: Lunar S2"
+    },
+    {
+      "n": 7,
+      "expected_sa": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      "got_sa": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      "pass": true,
+      "description": "n=7: Solar S1"
+    },
+    {
+      "n": 6,
+      "expected_sa": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "got_sa": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "pass": true,
+      "description": "n=6=2x3: Semiprime S5"
+    },
+    {
+      "n": 12,
+      "expected_sa": [
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "got_sa": [
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "pass": true,
+      "description": "n=12=2^2x3: Multiprime S6"
+    },
+    {
+      "n": 60,
+      "expected_sa": [
+        2,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "got_sa": [
+        2,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "pass": true,
+      "description": "n=60=2^2x3x5: three-axis S6"
+    },
+    {
+      "n": 128,
+      "expected_sa": [
+        7,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "got_sa": [
+        7,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "pass": true,
+      "description": "n=128=2^7: deep axis-2 S6"
+    },
+    {
+      "n": 17,
+      "expected_sa": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "got_sa": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "pass": true,
+      "description": "n=17: largest basis prime"
+    },
+    {
+      "n": 210,
+      "expected_sa": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      "got_sa": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      "pass": true,
+      "description": "n=210=2x3x5x7: primorial S6"
+    },
+    {
+      "n": 720,
+      "expected_sa": [
+        4,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "got_sa": [
+        4,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "pass": true,
+      "description": "n=720=2^4x3^2x5: highly composite S6"
+    },
+    {
+      "n": 1023,
+      "expected_sa": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "got_sa": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "pass": true,
+      "description": "n=1023=3x11x31: partial SA"
+    }
+  ],
+  "throughput": {
+    "iterations": 10000,
+    "ops_per_second_M": 12.2
+  },
+  "success": true,
+  "time_seconds": 0.003,
+  "timestamp": "2026-04-01T11:23:17.569493Z",
+  "python_version": "3.13.5 (tags/v3.13.5:6cb20a2, Jun 11 2025, 16:15:46) [MSC v.1943 64 bit (AMD64)]"
+}

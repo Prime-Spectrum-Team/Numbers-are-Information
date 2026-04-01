@@ -1,0 +1,29 @@
+{
+  "experiment": "EXP-1.2: Prime Residue Classes Mod 6",
+  "sieve_limit": 10000000,
+  "summary": {
+    "total_primes": 664579,
+    "primes_gt_3": 664577,
+    "class_1_count": 332194,
+    "class_5_count": 332383,
+    "dirichlet_ratio": 0.9994313788611331,
+    "sieve_time": 0.758582353591919,
+    "classify_time": 0.06585955619812012
+  },
+  "passed": true,
+  "results": {
+    "residue_distribution": {
+      "0": 0,
+      "1": 332194,
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 332383
+    },
+    "total_primes": 664579,
+    "primes_in_valid_classes": 664577,
+    "primes_in_invalid_classes": 0,
+    "dirichlet_ratio": 0.9994313788611331
+  },
+  "target": "P1 \u00a71.2 Foundation Axiom"
+}

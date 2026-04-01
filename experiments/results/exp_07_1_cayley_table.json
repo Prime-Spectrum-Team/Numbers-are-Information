@@ -1,0 +1,82 @@
+{
+  "experiment": "EXP-7.1 (Bonus): Cayley Table",
+  "n_reps_per_cell": 200,
+  "summary": {
+    "total_tests": 7200,
+    "total_passes": 7200,
+    "total_deviations": 0,
+    "max_deviation": 0,
+    "time_seconds": 24.738370418548584
+  },
+  "passed": true,
+  "results": {
+    "total_tests": 7200,
+    "total_passes": 7200,
+    "deviation_heatmap": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  "target": "P1 \u00a72.2 Semigroup Multiplication (Bonus)"
+}

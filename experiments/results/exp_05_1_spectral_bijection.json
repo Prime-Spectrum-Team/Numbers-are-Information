@@ -1,0 +1,30 @@
+{
+  "experiment": "EXP-5.1: SpectralAddress Bijection",
+  "n_samples": 10000,
+  "basis": [
+    2,
+    3,
+    5,
+    7,
+    11,
+    13,
+    17
+  ],
+  "summary": {
+    "total_samples": 10000,
+    "passes": 10000,
+    "failures": 0,
+    "success_rate": 1.0,
+    "ci_95_lo": 0.9996311800853812,
+    "ci_95_hi": 1.0,
+    "time_seconds": 0.17896151542663574
+  },
+  "passed": true,
+  "results": {
+    "passes": 10000,
+    "failures": 0,
+    "success_rate": 1.0,
+    "failure_details": []
+  },
+  "target": "P1 \u00a75.1 Spectral Representation"
+}

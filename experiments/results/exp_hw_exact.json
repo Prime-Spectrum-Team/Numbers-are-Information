@@ -1,0 +1,38 @@
+{
+  "script": "exp_spectral_hw_exact_nontorch.py",
+  "description": "Torch-freie Verifikation von spectral_hw_exact.py (SpectralAddressExtractor + SpectralAndGate + QuantResonance)",
+  "tests": {
+    "T1_v2_vs_verilog": {
+      "status": "PASS",
+      "errors": [],
+      "description": "p-adic v2 vs Verilog LUT (13 Werte)"
+    },
+    "T2_spectral_address": {
+      "status": "PASS",
+      "errors": [],
+      "description": "SA(60), SA(1)"
+    },
+    "T3_and_gate": {
+      "status": "PASS",
+      "errors": [],
+      "description": "SpectralAndGate (12,18) + (7,11)"
+    },
+    "T4_quant_resonance": {
+      "status": "PASS",
+      "errors": [],
+      "description": "Quantitative Resonanz (12,18),(8,32),(7,11),(30,60)"
+    },
+    "T5_sparsity_6_pi2": {
+      "status": "PASS",
+      "errors": [],
+      "ratio": 0.610517,
+      "expected_6_pi2": 0.607927,
+      "description": "Coprime-Sparsity \u2248 6/\u03c0\u00b2"
+    }
+  },
+  "summary": {
+    "total_pass": 5,
+    "total_fail": 0,
+    "verdict": "PASS"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "experiment": "EXP-5.3: Classification Recovery",
+  "n_samples": 100000,
+  "summary": {
+    "total_samples": 56282,
+    "agreements": 56282,
+    "disagreements": 0,
+    "agreement_rate": 0.56282,
+    "ci_95_lo": 0.5597387963670528,
+    "ci_95_hi": 0.565897559436809,
+    "time_seconds": 1.0792348384857178
+  },
+  "passed": true,
+  "results": {
+    "agreements": 56282,
+    "disagreements": 0,
+    "agreement_rate": 0.56282,
+    "disagreement_details": []
+  },
+  "target": "P1 \u00a75.3 Spectral Classification Equivalence"
+}

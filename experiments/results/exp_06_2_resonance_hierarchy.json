@@ -1,0 +1,40 @@
+{
+  "experiment": "EXP-6.2: Resonance Hierarchy",
+  "t": 2100,
+  "summary": {
+    "total_pairs": 2203950,
+    "type_counts": {
+      "type_2": 550725,
+      "type_23": 61075,
+      "type_235": 2415,
+      "type_2357": 45
+    },
+    "densities": {
+      "type_2": 0.2498808956646022,
+      "type_23": 0.027711608702556772,
+      "type_235": 0.001095759885659838,
+      "type_2357": 2.041788606819574e-05
+    },
+    "time_seconds": 0.3387579917907715
+  },
+  "passed": true,
+  "results": {
+    "type_2": {
+      "count": 550725,
+      "density": 0.2498808956646022
+    },
+    "type_23": {
+      "count": 61075,
+      "density": 0.027711608702556772
+    },
+    "type_235": {
+      "count": 2415,
+      "density": 0.001095759885659838
+    },
+    "type_2357": {
+      "count": 45,
+      "density": 2.041788606819574e-05
+    }
+  },
+  "target": "P1 \u00a76.2 Multi-Scale Resonance"
+}

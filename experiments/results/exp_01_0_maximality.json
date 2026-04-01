@@ -1,0 +1,57 @@
+{
+  "experiment": "EXP-1: Maximality of 7-class partition",
+  "step1_pass": false,
+  "step1_details": {
+    "0": {
+      "match": true,
+      "expected_class": 1
+    },
+    "1": {
+      "match": false,
+      "expected_class": 5
+    },
+    "2": {
+      "match": false,
+      "expected_class": 5
+    },
+    "3": {
+      "match": true,
+      "expected_class": 5
+    },
+    "4": {
+      "match": true,
+      "expected_class": 5
+    },
+    "5": {
+      "match": false,
+      "expected_class": 6
+    },
+    "6": {
+      "match": false,
+      "expected_class": 6
+    }
+  },
+  "step2_pass": true,
+  "step2_details": {
+    "solar_lunar": {
+      "6": 50000
+    },
+    "solar_solar": {
+      "6": 44936,
+      "5": 5064
+    },
+    "sl_deterministic": true,
+    "ss_probabilistic": true
+  },
+  "step3_pass": true,
+  "step3_details": {
+    "mul_same": true,
+    "addition_both_probabilistic": true,
+    "s6_split_vacuous": true,
+    "sq_samples": 65,
+    "pq_samples": 23313
+  },
+  "all_pass": false,
+  "time_seconds": 8023.713505744934,
+  "target": "P1 \u00a74.4 Proposition 4.8"
+}

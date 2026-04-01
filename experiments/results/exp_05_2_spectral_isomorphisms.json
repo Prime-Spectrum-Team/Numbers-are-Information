@@ -1,0 +1,32 @@
+{
+  "experiment": "EXP-5.2: Spectral Isomorphisms",
+  "summary": {
+    "multiplication_rate": 1.0,
+    "gcd_rate": 1.0,
+    "lcm_rate": 1.0,
+    "coprimality_rate": 1.0,
+    "total_tests": 40000,
+    "total_passes": 40000,
+    "time_seconds": 0.8826746940612793
+  },
+  "passed": true,
+  "results": {
+    "multiplication": {
+      "passes": 10000,
+      "total": 10000
+    },
+    "gcd": {
+      "passes": 10000,
+      "total": 10000
+    },
+    "lcm": {
+      "passes": 10000,
+      "total": 10000
+    },
+    "coprimality": {
+      "passes": 10000,
+      "total": 10000
+    }
+  },
+  "target": "P1 \u00a75.2 Spectral Structure Preservation"
+}

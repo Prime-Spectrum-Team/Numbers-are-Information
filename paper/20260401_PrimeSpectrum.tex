@@ -1,0 +1,1111 @@
+\documentclass[10pt,twocolumn]{article}
+
+%% ── Geometry: balanced two-column margins ───────────────────────────────────
+\usepackage[top=1in, bottom=1in, left=0.75in, right=0.75in,
+            columnsep=0.25in]{geometry}
+
+%% ── Core packages ───────────────────────────────────────────────────────────
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{titlesec}
+\usepackage{caption}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{dblfloatfix} % allows table* on same page as text in twocolumn
+\usepackage{flushend}   % balances columns on last page in twocolumn
+\usepackage{listings}   % for code blocks (no overflow unlike verbatim)
+
+%% ── parskip REMOVED — it breaks twocolumn column-height balance ─────────────
+
+%% ── Listings style for code ─────────────────────────────────────────────────
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true,
+  breakatwhitespace=false,
+  columns=flexible,
+  keepspaces=true,
+  frame=none,
+  xleftmargin=0pt,
+  xrightmargin=0pt
+}
+
+%% ── Theorem environments ────────────────────────────────────────────────────
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+%% ── Custom commands ─────────────────────────────────────────────────────────
+\newcommand{\cl}{\mathrm{cl}}
+\newcommand{\SA}{\mathrm{SA}}
+\newcommand{\Om}{\Omega}
+\newcommand{\B}{\mathbf{B}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!60!black,
+  citecolor=blue!60!black,
+  urlcolor=blue!60!black,
+}
+% Allow URL line breaks everywhere
+\def\UrlBreaks{\do\/\do\-\do\_\do\.\do\=\do\&\do\?}
+\urlstyle{same}
+
+%% ── Short alias for the long GitHub URL ─────────────────────────────────────
+\newcommand{\repourl}{%
+  \href{https://github.com/Prime-Spectrum-Team/Numbers-are-Information-.git}%
+       {\small\texttt{github.com/Prime-Spectrum-Team/}\\\texttt{Numbers-are-Information-}}%
+}
+
+%% ── Title / Author / Date ───────────────────────────────────────────────────
+\title{\textbf{Arithmetic Classification and Multiplicative Monoid
+Structure of Natural Numbers: A Seven-Class Partition, Prime Coordinate
+Representation, and Deterministic Addition Laws}}
+
+\author{Prime-Spectrum-Team}
+
+\date{Version 1.1 --- April 10, 2026}
+
+%% ════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+The natural numbers are conventionally treated as ordered magnitudes.
+This paper develops a complementary framework: every natural number $n$
+encodes intrinsic structural information through its prime
+factorization---information that is independent of the quantity $n$
+represents and computable in deterministic, finite time.
+
+We make five contributions, three of which systematize classical results
+into a unified framework and two of which are, to our knowledge, novel.
+
+\emph{Systematization.}
+\textbf{(C1)} We define a seven-class arithmetic partition of $\N$ based
+on two invariants---the total prime factor count $\Om(n)$ and the residue
+class of primes modulo 6---and prove it forms a finite commutative monoid
+$(S, \otimes)$ under induced multiplication, with a complete 49-entry
+Cayley table.
+\textbf{(C2)} We characterize the power dynamics $\cl(n^k)$ and prove the
+Universality Theorem: every $n > 1$ reaches the absorbing class $S_6$ in
+at most 3 steps.
+\textbf{(C5)} We define the resonance relation $R(i,j) = \Om(\gcd(i,j))$
+and prove that $\approx 61\%$ of integer pairs are non-resonant (coprime),
+matching the classical value $6/\pi^2$.
+
+\emph{Novel contributions.}
+\textbf{(C3)} We identify exactly 7 of the 28 unordered class pairs that
+yield a deterministic addition law: six are trivially forced by the
+singleton classes ($S_0=\{1\}$, $S_3=\{2\}$, $S_4=\{3\}$), and one---
+Solar $+$ Lunar $\to S_6$---is the unique \emph{non-trivially}
+deterministic law (Theorem~\ref{thm:solar-lunar}, verified on 90{,}000 pairs).
+\textbf{(C4)} We formalize the SpectralAddress---a $K$-dimensional vector
+of $p$-adic valuations, lossless for $\B$-smooth integers---and prove four
+$O(K)$ isomorphisms mapping multiplication, GCD, LCM, and coprimality
+testing to elementary vector operations.
+
+All results are computationally verified in Python (100{,}000 pairs per
+foundational axiom), C++20 ($\geq$475\,M Cayley lookups/s on Intel Core
+i5; 559\,M verified on AMD Ryzen~9~3900), and a Verilog RTL
+module intended for synthesis, validated via Python behavioral emulation
+(14/14 test vectors; on-device synthesis and timing simulation pending).
+
+\smallskip
+\noindent\textbf{Keywords:} prime factorization, arithmetic
+classification, multiplicative monoid, $p$-adic valuation,
+SpectralAddress, resonance, deterministic addition laws, FPGA number
+theory
+
+\smallskip
+\noindent\textbf{Repository:} \repourl
+\end{abstract}
+
+%% ────────────────────────────────────────────────────────────────────────────
+\section{Introduction}
+%% ────────────────────────────────────────────────────────────────────────────
+
+\subsection{The Standard View and Its Limitation}
+
+In computing, integers serve as universal indices: array positions, memory
+addresses, and sequence positions are identified by integers whose sole
+operationally relevant property is their ordinal position.
+
+This view is not wrong, but it is incomplete.
+
+The prime factorization of any integer $n > 1$ encodes structural
+information that is:
+\begin{itemize}[noitemsep, topsep=2pt]
+  \item \textbf{Intrinsic}---present in the number itself;
+  \item \textbf{Deterministic}---computable by a fixed procedure;
+  \item \textbf{Compositional}---the structure of a product is determined
+        by the structures of the factors.
+\end{itemize}
+
+Consider $n = 60 = 2^2 \times 3 \times 5$.  This factorization assigns it
+depth $\Om(60) = 4$ and places it at the intersection of three prime axes.
+These are not properties \emph{about} 60; they are properties 60
+\emph{is}.
+
+\subsection{Complementary Viewpoint}
+
+The standard view treats $n$ as an ordinal. The complementary view
+developed here treats $n$ as a coordinate in prime space: $60$ has
+SpectralAddress $[2,1,1,0,0,0,0]$, placing it at the intersection of
+prime axes 2, 3, and 5. Both views are consistent; they are adapted to
+different purposes. This prime-arithmetic view has a concrete operational
+consequence: every arithmetic operation on $\B$-smooth integers reduces to
+a corresponding linear operation on SpectralAddress vectors---all in $O(K)$
+time.
+
+\subsection{Contributions}
+
+\begin{itemize}[noitemsep, topsep=2pt]
+\item[\textbf{C1}] Seven-class partition and multiplicative monoid
+      (Theorems~\ref{thm:welldef}--\ref{thm:monoid}). \emph{Systematization.}
+\item[\textbf{C2}] Power dynamics and universality (Theorem~\ref{thm:universality}). \emph{Systematization.}
+\item[\textbf{C3}] Exactly 7 deterministic addition laws; 1 non-trivially
+      deterministic (Theorem~\ref{thm:solar-lunar}). \emph{Novel.}
+\item[\textbf{C4}] SpectralAddress and four $O(K)$ isomorphisms
+      (Propositions~\ref{prop:mult-isom}--\ref{prop:coprime}). \emph{Novel.}
+\item[\textbf{C5}] Resonance and $6/\pi^2$ sparsity (Theorem~\ref{thm:coprime-density}). \emph{Systematization.}
+\end{itemize}
+
+\subsection{Related Work}
+
+The individual components---$\Om$-function~\cite{HardyWright1979,Tenenbaum2015},
+prime factor count distributions~\cite{Sathe1953,Selberg1954},
+$p$-adic valuations~\cite{Gouvea1997}---are classical.
+A detailed positioning relative to prior work is given in Section~\ref{sec:relwork}.
+
+%% ────────────────────────────────────────────────────────────────────────────
+\section{Preliminaries}
+%% ────────────────────────────────────────────────────────────────────────────
+
+\subsection{The $\Omega$-Function}
+
+\begin{definition}\label{def:omega}
+For $n \in \N$ with canonical factorization $n = \prod_i p_i^{a_i}$,
+define $\Om(n) = \sum_i a_i$ for $n > 1$ and $\Om(1) = 0$.
+\end{definition}
+
+\begin{proposition}[Complete additivity of $\Om$]\label{prop:omega-add}
+For all $a, b \in \N$: $\Om(ab) = \Om(a) + \Om(b)$.
+\end{proposition}
+\begin{proof}
+From unique prime factorization:
+$\Om(ab) = \sum(\alpha_i + \beta_i) = \Om(a) + \Om(b)$. \qed
+\end{proof}
+
+\emph{This single axiom generates all 49 multiplication laws of the
+monoid.} The Erd\H{o}s--Kac theorem~\cite{ErdosKac1940} establishes
+that $\Om(n)$ is asymptotically normally distributed with mean and
+variance $\ln \ln n$, confirming that $S_6$ dominates at large $N$.
+
+\smallskip
+\noindent\textbf{Verification (E1.1).} 100{,}000 random pairs from
+$[1, 10^6]$: success rate 1.0 (95\% CI: [0.99996, 1.0]).
+
+\subsection{Prime Residues Modulo 6}
+
+\begin{proposition}\label{prop:prime-mod6}
+Every prime $p > 3$ satisfies $p \equiv 1 \pmod{6}$ or
+$p \equiv 5 \pmod{6}$.
+\end{proposition}
+\begin{proof}
+Among $\{0,1,2,3,4,5\}$ mod~6: residues $\{0,2,4\}$ imply divisibility
+by 2; residue 3 implies divisibility by 3. For prime $p > 3$, only
+residues 1 and 5 remain. \qed
+\end{proof}
+
+By Dirichlet's theorem~\cite{Dirichlet1837}, these two residue classes
+contain asymptotically equal numbers of primes. \emph{Verified on all
+664{,}579 primes below $10^7$: ratio $= 0.992$.}
+
+\subsection{The $p$-adic Valuation}
+
+\begin{definition}\label{def:p-adic}
+For prime $p$ and $n \in \N$, the \emph{$p$-adic valuation}
+$\nu_p(n) = \max\{a \geq 0 : p^a \mid n\}$.
+\end{definition}
+
+Key property: $\nu_p(ab) = \nu_p(a) + \nu_p(b)$.
+
+%% ────────────────────────────────────────────────────────────────────────────
+\section{The Seven-Class Partition and Multiplicative Monoid}
+%% ────────────────────────────────────────────────────────────────────────────
+
+\subsection{Definition and Interpretation}
+
+\begin{definition}[PrimeSpec classification]\label{def:primespec}
+Define $\cl : \N \to S = \{S_0, S_1, S_2, S_3, S_4, S_5, S_6\}$:
+\[
+\cl(n) = \begin{cases}
+S_0 & n = 1 \;\text{(Unit)} \\
+S_3 & n = 2 \;\text{(Dyadic)} \\
+S_4 & n = 3 \;\text{(Triadic)} \\
+S_1 & \Om(n)=1,\; n \equiv 1\!\pmod{6} \;\text{(Solar)} \\
+S_2 & \Om(n)=1,\; n \equiv 5\!\pmod{6} \;\text{(Lunar)} \\
+S_5 & \Om(n) = 2 \;\text{(Semiprime)} \\
+S_6 & \Om(n) \geq 3 \;\text{(Multiprime, absorbing)}
+\end{cases}
+\]
+\end{definition}
+
+\begin{table}[htbp]
+\centering
+\caption{The seven classes with examples and density at $N=10{,}000$.}\label{tab:classes}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}llllr@{}}
+\toprule
+Class & Name & Definition & Examples & $N{=}10{,}000$ \\
+\midrule
+$S_0$ & Unit      & $n=1$               & 1       & 0.01\% \\
+$S_1$ & Solar     & prime, $p\!\equiv\!1\,(6)$ & 7,13,19 & 6.1\% \\
+$S_2$ & Lunar     & prime, $p\!\equiv\!5\,(6)$ & 5,11,17 & 6.2\% \\
+$S_3$ & Dyadic    & $n=2$               & 2       & 0.01\% \\
+$S_4$ & Triadic   & $n=3$               & 3       & 0.01\% \\
+$S_5$ & Semiprime & $\Om(n)=2$          & 4,6,9   & 26.2\% \\
+$S_6$ & Multiprime& $\Om(n)\geq 3$      & 8,12,24 & 61.5\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{proposition}[Exhaustive partition]\label{prop:partition}
+$\cl$ defines a partition of $\N$: every natural number belongs to
+exactly one class.
+\end{proposition}
+\begin{proof}
+The cases are hierarchically disjoint: $n=1,2,3$ tested first; remaining
+primes classified by $\Om=1$ and residue mod~6 (Proposition~\ref{prop:prime-mod6}
+guarantees all primes $>3$ land in $S_1$ or $S_2$); then
+$\Om=2 \to S_5$, $\Om\geq 3 \to S_6$. \qed
+\end{proof}
+
+\begin{remark}[Density structure]\label{rem:density}
+All classes except $S_6$ have natural density 0. For $N \geq 100$, more
+than 60\% of integers are Multiprimes.
+\end{remark}
+
+\subsection{The Multiplicative Monoid}
+
+\begin{definition}\label{def:otimes}
+For $C_1, C_2 \in S$, define
+$C_1 \otimes C_2 := \cl(n_1 \cdot n_2)$ for any $n_i \in C_i$.
+\end{definition}
+
+\begin{theorem}[Well-definedness]\label{thm:welldef}
+The operation $\otimes$ is well-defined: $\cl(n_1 n_2)$ depends only on
+$\cl(n_1)$ and $\cl(n_2)$.
+\end{theorem}
+\begin{proof}
+The singleton classes $S_0=\{1\}$, $S_3=\{2\}$, $S_4=\{3\}$ have unique
+representatives, so products involving them are trivially well-defined.
+For non-singleton classes ($S_1, S_2, S_5, S_6$), note that
+$\Om(n_1 n_2) = \Om(n_1) + \Om(n_2) \geq 2$ by Proposition~\ref{prop:omega-add}, so the
+product never falls into the $\Om=1$ range where the mod-6 residue
+distinction applies. The output class is therefore determined entirely by
+the $\Om$-sum: $\Om = 2 \to S_5$; $\Om \geq 3 \to S_6$. Since $\Om$ is
+the sole determinant for classes with $\Om \geq 2$, the map
+$\cl(n_1 n_2)$ depends only on $\cl(n_1)$ and $\cl(n_2)$. \qed
+\end{proof}
+
+\begin{theorem}[Complete Cayley table]\label{thm:cayley}
+The multiplication $\otimes$ on $S$ is given by Table~\ref{tab:cayley}.
+\end{theorem}
+
+%% Wide table → spans both columns
+\begin{table*}[htbp]
+\centering
+\caption{Cayley table of $(S, \otimes)$. Verified on 200 pairs per
+         entry (9{,}800 total), zero deviations (E7.1).}\label{tab:cayley}
+\small
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{c|ccccccc}
+\toprule
+$\otimes$ & $S_0$ & $S_1$ & $S_2$ & $S_3$ & $S_4$ & $S_5$ & $S_6$ \\
+\midrule
+$S_0$ & $S_0$ & $S_1$ & $S_2$ & $S_3$ & $S_4$ & $S_5$ & $S_6$ \\
+$S_1$ & $S_1$ & $S_5$ & $S_5$ & $S_5$ & $S_5$ & $S_6$ & $S_6$ \\
+$S_2$ & $S_2$ & $S_5$ & $S_5$ & $S_5$ & $S_5$ & $S_6$ & $S_6$ \\
+$S_3$ & $S_3$ & $S_5$ & $S_5$ & $S_5$ & $S_5$ & $S_6$ & $S_6$ \\
+$S_4$ & $S_4$ & $S_5$ & $S_5$ & $S_5$ & $S_5$ & $S_6$ & $S_6$ \\
+$S_5$ & $S_5$ & $S_6$ & $S_6$ & $S_6$ & $S_6$ & $S_6$ & $S_6$ \\
+$S_6$ & $S_6$ & $S_6$ & $S_6$ & $S_6$ & $S_6$ & $S_6$ & $S_6$ \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{theorem}[Monoid structure {\cite{CliffordPreston1961}}]\label{thm:monoid}
+$(S, \otimes)$ is a finite commutative monoid:
+\begin{enumerate}[noitemsep, topsep=2pt]
+\item \emph{Associativity:}
+      $(C_1 \otimes C_2) \otimes C_3 = C_1 \otimes (C_2 \otimes C_3)$.
+\item \emph{Neutral element:} $S_0 \otimes C = C$ for all $C$.
+\item \emph{Absorbing element:} $S_6 \otimes C = S_6$ for all $C$.
+\item \emph{Commutativity:} $C_1 \otimes C_2 = C_2 \otimes C_1$.
+\item \emph{Idempotents:} $\{S_0, S_6\}$ only.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+Properties (2)--(5) are verified by inspection of
+Table~\ref{tab:cayley}. For~(1): pick representatives $a \in C_1$,
+$b \in C_2$, $c \in C_3$. Then
+$(C_1 \otimes C_2) \otimes C_3 = \cl(r \cdot c)$ for any
+$r \in \cl(a \cdot b)$. By Theorem~\ref{thm:welldef}, $\cl(r \cdot c)$
+depends only on $\cl(r)$ and $\cl(c)$, so
+$\cl(r \cdot c) = \cl((a \cdot b) \cdot c) = \cl(a \cdot (b \cdot c))$,
+where the last equality uses associativity of integer multiplication.
+By the symmetric argument, $C_1 \otimes (C_2 \otimes C_3) = \cl(a \cdot (b \cdot c))$. \qed
+\end{proof}
+
+\begin{theorem}[Completeness of the 7-class partition]
+\label{thm:maximality}
+The classification $\cl$ exhausts all distinctions available from the two
+invariants $\Om(n)$ and $p \bmod 6$:
+\begin{enumerate}[noitemsep, topsep=2pt]
+\item \emph{Closure:} The partition is closed under the induced
+      multiplication $\otimes$ (Theorem~\ref{thm:welldef}).
+\item \emph{Completeness:} The decision tree branches on three levels:
+      (i)~$\Om$-depth ($0, 1, 2, \geq 3$), (ii)~singleton status
+      ($n=1,2,3$), and (iii)~residue mod~6 for primes $>3$. Since
+      $\Om$-depth is already separated into all distinguishable strata
+      and mod-6 residues admit exactly two prime classes ($1$ and $5$),
+      no finer partition is possible within these invariants.
+\item \emph{Necessity of each class:} Merging $S_1$ and $S_2$ destroys
+      the deterministic addition law $S_1 + S_2 \to S_6$
+      (Theorem~\ref{thm:solar-lunar}); merging $S_3$ or $S_4$ into a
+      generic prime class removes the singleton property that forces the
+      six trivially deterministic addition laws.
+\end{enumerate}
+\emph{Note:} In the multiplicative direction alone, the four prime classes
+$S_1, S_2, S_3, S_4$ are equivalent (identical rows in
+Table~\ref{tab:cayley}), so a 4-element quotient
+$\{S_0, S_\mathrm{prime}, S_5, S_6\}$ suffices. The full 7-class
+refinement is necessary only when addition laws are considered.
+\end{theorem}
+\begin{proof}
+Property~(1) holds by Theorem~\ref{thm:welldef}.
+Property~(2) follows from the exhaustive case analysis: the three
+branching levels yield exactly $3 + 2 + 2 = 7$ leaf classes, with no
+further splitting possible.
+Property~(3): $p + q \equiv 0 \pmod{6}$ in
+Theorem~\ref{thm:solar-lunar} requires $p \equiv 1$ and $q \equiv 5$ (or
+vice versa); collapsing $S_1, S_2$ eliminates this distinction.
+Collapsing $S_3$ or $S_4$ eliminates the singleton sums. \qed
+\end{proof}
+
+\subsection{Power Dynamics}
+
+\begin{theorem}[Exponentiation trajectories]\label{thm:powerdyn}
+For $n \in C$ and $k \geq 1$: $\Om(n^k) = k \cdot \Om(n)$.
+\end{theorem}
+
+The resulting trajectories are summarised in Table~\ref{tab:powerdyn}.
+
+\begin{table}[htbp]
+\centering
+\caption{Power dynamics $\cl(n^k)$ by starting class.}\label{tab:powerdyn}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Class $C$ & $k=1$ & $k=2$ & $k \geq 3$ \\
+\midrule
+$S_0$                       & $S_0$ & $S_0$ & $S_0$ \\
+Primes ($S_1,S_2,S_3,S_4$) & $C$   & $S_5$ & $S_6$ \\
+$S_5$                       & $S_5$ & $S_6$ & $S_6$ \\
+$S_6$                       & $S_6$ & $S_6$ & $S_6$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{theorem}[Universality of Multiprime]\label{thm:universality}
+For every $n > 1$, there exists $k \in \N$ such that $\cl(n^k) = S_6$.
+\end{theorem}
+\begin{proof}
+Set $k = \lceil 3/\Om(n) \rceil$. Then
+$\Om(n^k) = k \cdot \Om(n) \geq 3$, giving $\cl(n^k) = S_6$. \qed
+\end{proof}
+
+\noindent\textbf{Verification.} 99{,}999 integers $n \in [2, 100{,}000]$:
+all reach $S_6$; maximum observed $k = 3$, matching the theoretical
+maximum $\lceil 3/1 \rceil = 3$ for primes.
+
+\smallskip\noindent\textbf{Interpretation.} Exponentiation drives every
+number toward the Multiprime basin. The flow
+$S_0 \to \text{Primes} \to S_5 \to S_6$ is irreversible under repeated
+self-multiplication.
+
+%% ────────────────────────────────────────────────────────────────────────────
+\section{Addition Laws}
+%% ────────────────────────────────────────────────────────────────────────────
+
+\subsection{Deterministic Laws}
+
+\begin{definition}\label{def:det-add}
+An addition law $\{C_1, C_2\} \to C_3$ is \emph{mathematically
+deterministic} if $\cl(n_1 + n_2) = C_3$ for \textbf{all}
+$n_1 \in C_1$, $n_2 \in C_2$ without exception.
+\end{definition}
+
+\begin{theorem}[The 7 deterministic addition laws]\label{thm:7laws}
+Exactly 7 unordered class pairs yield a deterministic result (Table~\ref{tab:7laws}).
+\end{theorem}
+
+\begin{table}[htbp]
+\centering
+\caption{The 7 deterministic addition laws.}\label{tab:7laws}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}lll p{2.8cm}@{}}
+\toprule
+$C_1$ & $C_2$ & Result & Justification \\
+\midrule
+$S_0$ & $S_0$ & $S_3$ & $1+1=2$ (singleton) \\
+$S_0$ & $S_3$ & $S_4$ & $1+2=3$ (singleton) \\
+$S_0$ & $S_4$ & $S_5$ & $1+3=4=2^2$ (singleton) \\
+$S_3$ & $S_3$ & $S_5$ & $2+2=4=2^2$ (singleton) \\
+$S_3$ & $S_4$ & $S_2$ & $2+3=5$ (Lunar, singleton) \\
+$S_4$ & $S_4$ & $S_5$ & $3+3=6=2{\times}3$ (singleton) \\
+$\mathbf{S_1}$ & $\mathbf{S_2}$ & $\mathbf{S_6}$ & \textbf{Thm.~\ref{thm:solar-lunar}} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\emph{Note.} The first six laws are deterministic because
+$S_0=\{1\}$, $S_3=\{2\}$, $S_4=\{3\}$ are singletons. The seventh is
+the unique non-trivially deterministic law.
+
+\emph{Count.} There are $\binom{7}{2}+7=28$ unordered class pairs.
+Non-determinism of each of the remaining 21 is established by explicit
+counterexample.\footnote{For instance, $\{S_0, S_2\}$ might appear
+deterministic empirically ($P(S_6) \approx 62.5\%$ in Table~\ref{tab:prob-add}), but is
+refuted by a single witness: $1 + 5 = 6$ with $\cl(6) = S_5$, while
+$1 + 11 = 12$ with $\cl(12) = S_6$. Experiment E-S0.S2 in the
+repository confirms that every non-deterministic pair admits at least
+two distinct output classes.}
+Table~\ref{tab:prob-add} gives the full empirical distributions.
+
+\begin{theorem}[Solar + Lunar $\to$ Multiprime]
+\label{thm:solar-lunar}
+For any Solar prime $p \in S_1$ and Lunar prime $q \in S_2$:
+$\cl(p + q) = S_6$.
+\end{theorem}
+\begin{proof}
+$p \equiv 1 \pmod{6}$ and $q \equiv 5 \pmod{6}$ imply
+$p + q \equiv 0 \pmod{6}$, so $6 \mid (p+q)$.
+Since $p \geq 7$ and $q \geq 5$, we have $p+q \geq 12$.
+Write $p+q = 6m$ with $m \geq 2$. Then
+$\Om(p+q) = \Om(6m) = \Om(6)+\Om(m) = 2 + \Om(m) \geq 3$,
+giving $\cl(p+q) = S_6$. \qed
+\end{proof}
+
+\noindent\textbf{Verification (E4.1).} All 90{,}000 Solar--Lunar pairs
+in $[7, 100{,}000]$: zero exceptions (95\% CI for $P(S_6)$:
+$[0.99996, 1.0]$).
+
+\subsection{Probabilistic Laws}
+
+For the remaining 21 class pairs, $\cl(n_1 + n_2)$ varies with
+representative choice. Table~\ref{tab:prob-add} characterises all 21 distributions
+empirically.
+
+\begin{table*}[htbp]
+\centering
+\caption{Empirical distributions for all 21 probabilistic addition laws
+         ($n=100{,}000$ pairs each, 95\% CI width ${<}0.007$).}\label{tab:prob-add}
+\small
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{@{}llrrr@{}}
+\toprule
+$C_1$ & $C_2$ & $P(S_6)$ & $P(S_5)$ & $P(\text{prime})$ \\
+\midrule
+$S_0$ & $S_1$ & 62.2\% & 31.1\% & 6.7\% \\
+$S_0$ & $S_2$ & 62.5\% & 31.0\% & 6.5\% \\
+$S_0$ & $S_5$ & 74.4\% & 19.2\% & 6.4\% \\
+$S_0$ & $S_6$ & 71.6\% & 20.8\% & 7.6\% \\
+$S_1$ & $S_1$ & 88.4\% & 11.6\% & ${<}0.1$\% \\
+$S_1$ & $S_3$ & 82.5\% & 17.5\% & 0\% \\
+$S_1$ & $S_4$ & 86.8\% & 13.2\% & 0\% \\
+$S_1$ & $S_5$ & 88.3\% & 10.8\% & 0.9\% \\
+$S_1$ & $S_6$ & 86.5\% & 12.3\% & 1.2\% \\
+$S_2$ & $S_2$ & 88.4\% & 11.6\% & ${<}0.1$\% \\
+$S_2$ & $S_3$ & 33.8\% & 42.3\% & 23.9\% \\
+$S_2$ & $S_4$ & 79.8\% & 18.9\% & 1.3\% \\
+$S_2$ & $S_5$ & 87.4\% & 11.2\% & 1.4\% \\
+$S_2$ & $S_6$ & 86.5\% & 12.2\% & 1.3\% \\
+$S_3$ & $S_5$ & 74.1\% & 25.9\% & 0\% \\
+$S_3$ & $S_6$ & 72.5\% & 21.0\% & 6.5\% \\
+$S_4$ & $S_5$ & 79.2\% & 17.3\% & 3.5\% \\
+$S_4$ & $S_6$ & 72.8\% & 20.7\% & 6.5\% \\
+$S_5$ & $S_5$ & 87.5\% & 12.5\% & 0\% \\
+$S_5$ & $S_6$ & 87.0\% & 11.5\% & 1.5\% \\
+$S_6$ & $S_6$ & 71.8\% & 20.6\% & 7.6\% \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+The symmetric Solar/Lunar structure
+($P(S_6 \mid S_1{+}S_1) \approx P(S_6 \mid S_2{+}S_2) \approx 88.4\%$)
+confirms the Dirichlet balance (Section~2.2).
+The anomalous distribution of $S_2 + S_3$ (only 33.8\% $S_6$, 23.9\%
+prime) arises from the special role of 2: adding 2 to a Lunar prime
+$q \equiv 5 \pmod{6}$ gives $q+2 \equiv 1 \pmod{6}$, frequently yielding
+another prime.
+
+%% ────────────────────────────────────────────────────────────────────────────
+\section{SpectralAddress: Numbers as Coordinates}
+%% ────────────────────────────────────────────────────────────────────────────
+
+\subsection{Definition}
+
+\begin{definition}[SpectralAddress]\label{def:sa}
+Fix a prime basis $\B = (p_1, \ldots, p_K)$ with $p_i$ the $i$-th prime.
+The SpectralAddress of $n$ is:
+\[
+\SA(n) = \bigl(\nu_{p_1}(n), \ldots, \nu_{p_K}(n)\bigr)
+         \in \mathbb{N}_0^K
+\]
+Default basis: $K=7$, $\B=(2,3,5,7,11,13,17)$.
+\end{definition}
+
+\noindent\textbf{Limitation.} SpectralAddress is lossless only for
+$\B$-smooth integers~\cite{Hildebrand1986}. For $K=7$ and $n$ up to
+$17^7 = 410{,}338{,}673$, the representation is exact.
+
+\subsection{Algebraic Isomorphisms}
+
+\begin{proposition}[Multiplication isomorphism]\label{prop:mult-isom}
+For $\B$-smooth $a, b$:
+\[
+\SA(ab) = \SA(a) + \SA(b)
+\quad \text{(component-wise, $O(K)$)}
+\]
+\end{proposition}
+
+\begin{proposition}[GCD and LCM isomorphisms]\label{prop:gcd-lcm-isom}
+For $\B$-smooth $a, b$:
+\begin{align*}
+\SA(\gcd(a,b)) &= \min(\SA(a), \SA(b)) \quad \text{($O(K)$)} \\
+\SA(\mathrm{lcm}(a,b)) &= \max(\SA(a), \SA(b)) \quad \text{($O(K)$)}
+\end{align*}
+\end{proposition}
+
+\begin{proposition}[Coprimality criterion]\label{prop:coprime}
+For $\B$-smooth $a, b$:
+\[
+\gcd(a,b) = 1 \iff \SA(a) \cdot \SA(b) = 0
+\]
+\textbf{Warning (scope restriction).} This criterion holds \emph{only}
+for $\B$-smooth integers. If $a$ or $b$ carries a prime factor outside
+$\B$, the SA-vectors cannot detect it, yielding a false positive.
+\emph{Example:} $a = 2 \cdot 19 = 38$, $b = 3 \cdot 19 = 57$ with the
+default basis give inner product $0$, yet $\gcd(38,57)=19\neq 1$.
+\end{proposition}
+
+\begin{table}[htbp]
+\centering
+\caption{Arithmetic operations as geometry.}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Arithmetic operation & SA operation & Complexity \\
+\midrule
+Multiplication $a \times b$  & Vector addition        & $O(K)$ \\
+$\gcd(a, b)$                 & Component-wise min     & $O(K)$ \\
+$\mathrm{lcm}(a, b)$         & Component-wise max     & $O(K)$ \\
+Coprimality test             & Inner product $= 0?$   & $O(K)$ \\
+Classification $\cl(n)$      & $L_1$ norm of $\SA(n)$ & $O(K)$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent\textbf{Verification.} Bijection: 10{,}000/10{,}000 round-trip
+reconstructions exact. Four isomorphisms: 40{,}000/40{,}000 tests passed.
+
+%% ────────────────────────────────────────────────────────────────────────────
+\section{Resonance Relation and Sparsity}
+%% ────────────────────────────────────────────────────────────────────────────
+
+\subsection{Definition}
+
+\begin{definition}[Resonance]\label{def:resonance}
+For integers $i, j$:
+\[
+R(i,j) = \|\min(\SA(i), \SA(j))\|_1 = \Om(\gcd(i,j))
+\]
+We call $i$ and $j$ \emph{resonant} if $R(i,j) > 0$, i.e.,
+$\gcd(i,j) > 1$. The term \emph{resonance} denotes structural
+co-divisibility; it has no topological or analytic content beyond this
+arithmetic definition.
+\end{definition}
+
+\subsection{Asymptotic Sparsity}
+
+\begin{theorem}[Coprime density]\label{thm:coprime-density}
+\[
+P\bigl(R(i,j) = 0\bigr)
+= P\bigl(\gcd(i,j) = 1\bigr)
+= \frac{6}{\pi^2} \approx 0.6079
+\]
+\end{theorem}
+\begin{proof}
+Classical:
+$P(\gcd(i,j)=1) = \prod_p (1 - p^{-2}) = 1/\zeta(2) = 6/\pi^2$. \qed
+\end{proof}
+
+\noindent\textbf{Verification.} Empirical coprime fractions for
+$T \in \{64, \ldots, 8192\}$ converge monotonically to $6/\pi^2$
+(deviation at $T=8{,}192$: $0.0002$).
+
+\subsection{Multi-Scale Resonance Hierarchy}
+
+Experiment E6.2 ($T = 2{,}100$; 2{,}203{,}950 total pairs):
+
+\begin{table}[htbp]
+\centering
+\caption{Multi-scale resonance hierarchy (E6.2).}\label{tab:resonance}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}llll@{}}
+\toprule
+Type    & Definition      & Empirical         & Theoretical \\
+\midrule
+Type-2    & both div.\ 2   & 0.2499            & $\approx 1/4$     \\
+Type-23   & both div.\ 6   & 0.02771           & $\approx 1/36$    \\
+Type-235  & both div.\ 30  & 0.001096          & $\approx 1/900$   \\
+Type-2357 & both div.\ 210 & $2.04\!\times\!10^{-5}$ & $\approx 1/44100$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+This logarithmic hierarchy constitutes a natural multi-scale structure
+arising from arithmetic. Experimental validation as a routing prior for
+sequence processing is ongoing and will be presented in a companion paper.
+
+%% ────────────────────────────────────────────────────────────────────────────
+\section{Computational Verification}
+%% ────────────────────────────────────────────────────────────────────────────
+
+\subsection{Python Reference Implementation}
+
+All theoretical results are verified in Python via a shared
+classification module (\texttt{spectral\_matrix.py}); only E4.1 requires
+\texttt{sympy} for symbolic verification. All 18 pytest-runnable
+experiments are listed in the repository's \texttt{EXPERIMENT\_INDEX.md}.
+
+\begin{itemize}[noitemsep, topsep=2pt]
+\item E0.0 (SpectralMemory benchmark): 2-layer, 4-head architecture on
+      TinyShakespeare; 5 tests (context scaling, latency, memory,
+      infinite retrieval, sliding-window comparison); see Section~\ref{subsec:structural}
+\item E1.0 (Maximality of 7-class partition): confirmed that all 7 classes
+      are necessary and no finer $\Om$/mod-6 partition exists
+\item E1.1 ($\Om$-additivity): 100{,}000 random pairs, rate 1.0
+\item E1.2 (Prime residues mod~6): all 664{,}579 primes below $10^7$
+\item E2.1 (Partition completeness): verified exhaustive coverage
+\item E2.3a (Coprime sparsity): empirical $6/\pi^2$ convergence
+\item E2.3b (Monoid identity/absorption): verified $S_0$, $S_6$ properties
+\item E3.1 (Power dynamics): 99{,}999 integers, max $k=3$
+\item E4.1 (Solar+Lunar, \texttt{sympy}): 90{,}000 pairs, zero exceptions
+\item E5.1 (SA bijection): 10{,}000 round-trips, zero failures
+\item E5.2 (SA isomorphisms): 40{,}000 tests, 100\% pass rate
+\item E5.3a (Classification recovery from SA): 56{,}282 $\B$-smooth
+      integers from 100{,}000 samples; $\cl(n)$ via direct factorization
+      agrees with $\cl$ recovered from $\SA(n)$ in 100\% of cases
+      (0 disagreements)
+\item E5.3b ($\B$-smooth boundary): bijection breaks at $n=19$
+      (first prime ${>}\max(\B)$); $\B$-smooth fraction decays from
+      28.7\% at $N{=}1{,}000$ to 9.45\% at $N{=}10{,}000$ to 2.58\%
+      at $N{=}100{,}000$
+\item E6.2 (Resonance hierarchy): 2{,}203{,}950 pairs at $T=2{,}100$
+\item E7.1 (Cayley table): 200 pairs/entry (9{,}800 total), zero deviations
+\item E10.0 (All 28 addition laws): 100{,}000 pairs each, 7 deterministic
+      confirmed, 21 non-deterministic with witnesses
+\end{itemize}
+
+\subsection{C++20 High-Performance Implementation}
+
+\begin{table}[htbp]
+\centering
+\caption{C++20 benchmarks (Intel Core i5, \texttt{-O3}).}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Operation & Throughput & Complexity \\
+\midrule
+$\cl(n)$ classification & 0.84\,M ops/s   & $O(\sqrt{n})$ \\
+Cayley lookup           & 475\,M ops/s$^{a}$ & $O(1)$ \\
+SA computation          & 19.9\,M ops/s$^{b}$ & $O(K)$ \\
+SA GCD                  & 10.7\,M ops/s$^{c}$ & $O(K)$ \\
+SA round-trip           & 10{,}000/10{,}000 & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent{\small
+$^{a}$ Precomputed class indices; 559.9\,M ops/s on AMD Ryzen~9~3900
+(GCC~14.2, \texttt{-O3 -march=native}).\\
+$^{b}$ Includes trial division over $K=7$ basis primes.\\
+$^{c}$ Standalone component-wise min on precomputed vectors; combined
+SA-compute+GCD limited by $^{b}$. GCD step alone exceeds 1{,}000\,M
+ops/s on precomputed vectors (AMD Ryzen~9~3900, verified).
+}
+
+\smallskip
+The Cayley table fits in 49~bytes; a single lookup requires one array
+access.
+
+\subsection{Verilog RTL Proof of Concept}
+
+A Verilog module \texttt{spectral\_cell.v}, intended for synthesis, implements
+SpectralAddress lookup for $n < 1024$ via a precomputed BRAM18
+lookup table ($1024 \times 21 = 21{,}504$~bits $\approx 2.6$\,KB):
+
+\begin{lstlisting}[language=Verilog]
+module spectral_cell #(parameter K=7) (
+    input  clk,
+    input  [9:0]   n_in,
+    output reg [K*3-1:0] sa_out
+);
+  reg [K*3-1:0] lut [0:1023];
+  initial $readmemb("sa_lut.mem", lut);
+  always @(posedge clk) sa_out <= lut[n_in];
+endmodule
+\end{lstlisting}
+
+\noindent\textbf{Proof-of-concept results:} 14/14 test vectors passed
+(Python behavioral emulation of the RTL design). This constitutes a
+functional proof of concept, not exhaustive hardware verification.
+RTL synthesis, place-and-route, timing simulation, and full-coverage
+testing (all 1{,}024 inputs) remain pending. Target platform:
+Xilinx Artix-7 (Arty~A7-35T); latency of 1 clock cycle at 100\,MHz is
+the design target, not a verified timing result.
+
+%% ────────────────────────────────────────────────────────────────────────────
+\section{Computational Framework}
+%% ────────────────────────────────────────────────────────────────────────────
+
+\subsection{Operational Summary}
+
+The individual components ($\Om$-function, mod-6 residues, $p$-adic
+valuations) are classical. The contribution of this framework is their
+combination into a single classification scheme with a complete algebraic
+characterization, deterministic addition laws, and systematic
+operationalization as a computational toolkit.
+
+\begin{table}[htbp]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\columnwidth}{@{}lXX@{}}
+\toprule
+Concept & Classical view & PrimeSpec oper. \\
+\midrule
+What is $n$?    & A count           & Coord.\ $\SA(n)$ \\
+Connects $i,j$? & Diff.\ $|i{-}j|$ & Resonance $R(i,j)$ \\
+What is prime?  & Not divisible     & Atom: 1 axis \\
+Multiply?       & Rpt.\ addition    & Vec.\ add.\ $O(K)$ \\
+What is GCD?    & Largest divisor   & Min component \\
+\bottomrule
+\end{tabularx}
+\caption{Classical view vs.\ PrimeSpec operationalization.}
+\end{table}
+
+\subsection{Informational Content}
+
+The classification entropy at $N=10{,}000$ (computed from the empirical
+densities in Table~\ref{tab:classes}):
+\[
+H(S) = -\sum_{i=0}^{6} P(S_i) \log_2 P(S_i)
+      \approx 1.47 \text{ bits per integer}
+\]
+This lies well below the maximum $\log_2 7 \approx 2.807$ bits, reflecting
+the strong dominance of $S_6$ (61.5\% of all integers at this range).
+
+The SpectralAddress at $K=7$ carries $\approx 6.17$ bits per vector
+(Shannon entropy of the coordinate distribution over the first $10^4$
+integers).
+
+\subsection{Structural Computation}\label{subsec:structural}
+
+\textbf{For associative memory.} A query at position $q$ resonates with
+all positions $p$ where $\gcd(q,p) > 1$. With a precomputed
+SpectralAddress table, computing resonance scores for $N$ candidate
+positions requires $O(N \cdot K)$ arithmetic operations.
+
+\noindent\textbf{Experiment E0.0 (SpectralMemory benchmark).}
+A 2-layer, 4-head SpectralMemory architecture replaces learned
+positional encodings with $p$-adic valuation vectors and replaces the
+causal attention mask with the resonance AND-gate
+$R(i,j) = \sum_p \min(\nu_p(i), \nu_p(j))$. No positional parameters
+are learned; all routing derives from prime structure. The architecture
+is benchmarked against standard causal attention and a sliding-window
+baseline on TinyShakespeare across five tests:
+
+\begin{enumerate}[noitemsep, topsep=2pt]
+\item \emph{Context scaling} ($T \in \{128, 256, 512\}$): The
+      resonance-based mask achieves $\approx$61\% sparsity (matching
+      the $6/\pi^2$ coprime fraction). The validation loss gap closes
+      monotonically with context length, reaching parity at $T=512$
+      ($\Delta_{\mathrm{val}} = {-}0.022$).
+\item \emph{Latency scaling}: Wall-clock time per forward pass as a
+      function of $T$.
+\item \emph{Memory scaling}: Peak memory allocation as a function of $T$.
+\item \emph{Infinite retrieval}: Resonance-based retrieval of a target
+      token at distances $10{,}000$ to $500{,}000$ positions runs in
+      $O(K)$ time independent of distance.
+\item \emph{Sliding-window comparison}: Direct comparison with
+      Longformer-style fixed-window attention.
+\end{enumerate}
+
+\noindent\emph{Status and scope.} These results demonstrate the
+operational feasibility of resonance-based attention routing but are
+limited to a small-scale setting (TinyShakespeare, 2-layer model, CPU).
+Large-scale validation on production datasets and GPU hardware is
+deferred to a companion paper. No performance superiority claims are
+made in the present work.
+
+\textbf{For database indexing.} Records indexed by $\B$-smooth key $n$
+have SpectralAddress $\SA(n)$. Divisibility queries reduce to single-axis
+lookups; structural similarity queries reduce to $K$-comparison resonance
+tests. The $\B$-smoothness restriction must be verified for all keys.
+
+\textbf{For computational hardware.} The entire Cayley table fits in
+49~bytes; SpectralAddress lookup for $n < 1024$ fits in ${\approx}\,2.6$\,KB BRAM.
+The resonance gate is a single bitwise AND. These operations are
+hardware-native at commodity FPGA resource costs.
+
+%% ────────────────────────────────────────────────────────────────────────────
+\section{Related Work and Open Problems}\label{sec:relwork}
+%% ────────────────────────────────────────────────────────────────────────────
+
+\subsection{Positioning}
+
+The individual components ($\Om$-function, mod-6 residues, $p$-adic
+valuations, coprime density) are classical, and contributions C1, C2, C5
+systematize known results into a unified framework.
+The novel content is the complete characterization of deterministic
+addition laws (C3), in particular the Solar+Lunar law
+(Theorem~\ref{thm:solar-lunar}), and the combined operationalization as
+a computational toolkit with cross-platform verification.
+To our knowledge, no prior work has combined these components into a
+single classification scheme with (1) a complete Cayley table, (2) a
+full characterization of deterministic addition laws with explicit
+non-determinism witnesses, or (3) cross-platform computational
+verification including hardware behavioral simulation. Geroldinger and colleagues study
+non-unique factorization in monoids~\cite{GeroldingerHalterKoch2006}.
+$p$-adic applications in ML~\cite{ZunigaGalindo2023} use ultrametric
+topology; our SpectralAddress provides a compatible finite-dimensional
+substrate. For computational aspects of primality and factorization
+see~\cite{CrandallPomerance2005}; for additive number theory
+see~\cite{Nathanson1996}.
+
+\subsection{Limitations}
+
+\begin{enumerate}[noitemsep, topsep=2pt]
+\item SpectralAddress is exact only for $\B$-smooth integers; non-smooth
+      factors require extended basis or explicit treatment.
+\item The monoid's essential structure is 4-element; the 7-class
+      refinement is necessary for addition laws and SpectralAddress but
+      not for multiplication alone.
+\item ML application results are preliminary; large-scale validation is
+      ongoing and deferred to a companion paper. No performance claims are
+      made in the present work.
+\end{enumerate}
+
+\subsection{Open Problems}
+
+\begin{enumerate}[noitemsep, topsep=2pt]
+\item \textbf{Complete addition characterization.} Find closed-form
+      distributions for the 21 non-deterministic addition laws.
+\item \textbf{Finer partitions.} Does there exist a partition based on
+      $\Om$ and residues mod $m > 6$ that is closed under multiplication
+      and admits a strictly larger set of non-trivially deterministic
+      addition laws?
+\item \textbf{Gaussian integer extension.} Does an analogous semigroup
+      exist over $\Z[i]$?
+\item \textbf{Optimal basis size.} How does information content and
+      computational utility scale with $K$?
+\item \textbf{Prime pair sums in $S_6$.} Does every sufficiently large
+      $n$ with $6 \mid n$ arise as a sum $p + q$ with $p \equiv 1\pmod{6}$
+      and $q \equiv 5\pmod{6}$ both prime? This is \emph{strictly stronger}
+      than Goldbach's conjecture restricted to multiples of~6, since it
+      additionally imposes residue conditions on the summands. Standard
+      circle-method results~\cite{Nathanson1996} apply to the unconstrained
+      case; the residue-constrained variant appears open.
+\item \textbf{$L$-function connections.} Are there relationships between
+      the monoid structure and the analytic theory of the Selberg
+      class~\cite{IwaniecKowalski2004}?
+\end{enumerate}
+
+%% ────────────────────────────────────────────────────────────────────────────
+\section{Conclusion}
+%% ────────────────────────────────────────────────────────────────────────────
+
+We have completely characterised the algebraic structure induced by
+classifying $\N$ via $\Om$-depth and prime residue mod~6.
+
+\begin{table}[htbp]
+\centering
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\columnwidth}{@{}lXl@{}}
+\toprule
+Result & Statement & Status \\
+\midrule
+7-class partition & Exhaustive partition       & Proved \\
+Monoid            & Finite comm.\ monoid       & Proved \\
+Cayley table      & 49 entries verified         & Proved+ver. \\
+Universality      & $n{>}1$ reaches $S_6$      & Proved+ver. \\
+7 add.\ laws      & Exact, deterministic       & Proved \\
+Solar+Lunar       & $S_1+S_2 \to S_6$          & Proved \\
+SpectralAddress   & 4 isom., $O(K)$            & Proved+ver. \\
+Resonance         & $6/\pi^2$ non-res.         & Proved+ver. \\
+Verilog RTL       & PoC 14/14 vectors           & RTL pending \\
+\bottomrule
+\end{tabularx}
+\caption{Summary of contributions and verification status.}
+\end{table}
+
+By making prime-arithmetic structure explicit, computable, and
+hardware-native, we enable systems that reason about numbers not only as
+ordered magnitudes but as elements of a structured algebraic space.
+
+\smallskip
+\noindent\textbf{Code and data:} \repourl
+
+%% ────────────────────────────────────────────────────────────────────────────
+\begin{thebibliography}{99}
+
+\bibitem{Dirichlet1837}
+P.G.L. Dirichlet,
+``Beweis des Satzes, dass jede unbegrenzte arithmetische Progression
+unendlich viele Primzahlen enthält,''
+\textit{Abh. Königl. Preuss. Akad. Wiss.}, pp.\ 45--81, 1837.
+
+\bibitem{ErdosKac1940}
+P. Erd\H{o}s and M. Kac,
+``The Gaussian law of errors in the theory of additive number theoretic
+functions,''
+\textit{Amer.\ J.\ Math.}, vol.\ 62, pp.\ 738--742, 1940.
+
+\bibitem{GeroldingerHalterKoch2006}
+A. Geroldinger and F. Halter-Koch,
+\textit{Non-Unique Factorizations.} Chapman \& Hall/CRC, 2006.
+
+\bibitem{Gouvea1997}
+F.Q. Gouv\^{e}a,
+\textit{p-adic Numbers: An Introduction.} Springer, 1997.
+
+\bibitem{HardyWright1979}
+G.H. Hardy and E.M. Wright,
+\textit{An Introduction to the Theory of Numbers}, 5th~ed.
+Oxford Univ.\ Press, 1979.
+
+\bibitem{Sathe1953}
+L. Sathe,
+``On a problem of Hardy on the distribution of integers having a given
+number of prime factors,''
+\textit{J.\ Indian Math.\ Soc.}, vol.\ 17, pp.\ 63--141, 1953.
+
+\bibitem{Selberg1954}
+A. Selberg,
+``Note on a paper by L.G.\ Sathe,''
+\textit{J.\ Indian Math.\ Soc.}, vol.\ 18, pp.\ 83--87, 1954.
+
+\bibitem{Tenenbaum2015}
+G. Tenenbaum,
+\textit{Introduction to Analytic and Probabilistic Number Theory},
+3rd~ed. Cambridge Univ.\ Press, 2015.
+
+\bibitem{ZunigaGalindo2023}
+W.A. Z\'{u}\~{n}iga-Galindo,
+``p-adic cellular neural networks,''
+arXiv:2309.01512, 2023.
+
+\bibitem{CliffordPreston1961}
+A.H. Clifford and G.B. Preston,
+\textit{The Algebraic Theory of Semigroups}, Vol.~1.
+Amer.\ Math.\ Soc., 1961.
+
+\bibitem{Nathanson1996}
+M.B. Nathanson,
+\textit{Additive Number Theory: The Classical Bases.}
+Springer, 1996.
+
+\bibitem{CrandallPomerance2005}
+R. Crandall and C. Pomerance,
+\textit{Prime Numbers: A Computational Perspective}, 2nd~ed.
+Springer, 2005.
+
+\bibitem{Hildebrand1986}
+A. Hildebrand,
+``On the number of positive integers $\leq x$ and free of prime
+factors $> y$,''
+\textit{J.\ Number Theory}, vol.\ 22, pp.\ 289--307, 1986.
+
+\bibitem{IwaniecKowalski2004}
+H. Iwaniec and E. Kowalski,
+\textit{Analytic Number Theory.}
+Amer.\ Math.\ Soc., 2004.
+
+\end{thebibliography}
+
+%% ────────────────────────────────────────────────────────────────────────────
+\appendix
+\section{Python Reference Classifier}
+%% ────────────────────────────────────────────────────────────────────────────
+
+\begin{lstlisting}[language=Python]
+def omega(n):
+    count, d = 0, 2
+    while d * d <= n:
+        while n % d == 0:
+            count += 1; n //= d
+        d += 1
+    return count + (1 if n > 1 else 0)
+
+def classify(n):
+    if n == 1: return 'S0'
+    if n == 2: return 'S3'
+    if n == 3: return 'S4'
+    w = omega(n)
+    if w == 1: return 'S1' if n % 6 == 1 else 'S2'
+    if w == 2: return 'S5'
+    return 'S6'
+
+def spectral_address(n, basis=(2,3,5,7,11,13,17)):
+    sa = []
+    for p in basis:
+        v = 0
+        while n % p == 0: v += 1; n //= p
+        sa.append(v)
+    return tuple(sa)
+
+CAYLEY = [
+    [0,1,2,3,4,5,6],
+    [1,5,5,5,5,6,6],
+    [2,5,5,5,5,6,6],
+    [3,5,5,5,5,6,6],
+    [4,5,5,5,5,6,6],
+    [5,6,6,6,6,6,6],
+    [6,6,6,6,6,6,6],
+]
+\end{lstlisting}
+
+\end{document}

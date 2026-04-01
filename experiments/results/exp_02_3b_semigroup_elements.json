@@ -1,0 +1,19 @@
+{
+  "experiment": "EXP-2.3: Semigroup Elements",
+  "n_reps_per_class": 100,
+  "summary": {
+    "identity_rate": 1.0,
+    "absorption_rate": 1.0,
+    "total_tests": 1200,
+    "total_passes": 1200,
+    "time_seconds": 5.434245347976685
+  },
+  "passed": true,
+  "results": {
+    "identity_passes": 600,
+    "identity_total": 600,
+    "absorption_passes": 600,
+    "absorption_total": 600
+  },
+  "target": "P1 \u00a72.3 Semigroup Structure"
+}

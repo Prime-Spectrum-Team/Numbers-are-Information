@@ -1,0 +1,48 @@
+{
+  "experiment": "EXP-2.1: Partition Completeness",
+  "description": "Every n in [1, N] belongs to exactly one PrimeSpec class",
+  "n_range": [
+    1,
+    100000
+  ],
+  "total": 100000,
+  "total_assigned": 100000,
+  "exhaustive": true,
+  "mutually_exclusive": true,
+  "exceptions_count": 0,
+  "class_distribution": {
+    "S0 (Unit)": {
+      "count": 1,
+      "pct": 0.001
+    },
+    "S1 (Solar)": {
+      "count": 4784,
+      "pct": 4.784
+    },
+    "S2 (Lunar)": {
+      "count": 4806,
+      "pct": 4.806
+    },
+    "S3 (Dyadic)": {
+      "count": 1,
+      "pct": 0.001
+    },
+    "S4 (Triadic)": {
+      "count": 1,
+      "pct": 0.001
+    },
+    "S5 (Semiprime)": {
+      "count": 23378,
+      "pct": 23.378
+    },
+    "S6 (Multiprime)": {
+      "count": 67029,
+      "pct": 67.029
+    }
+  },
+  "exceptions": [],
+  "success": true,
+  "time_seconds": 0.736,
+  "timestamp": "2026-04-01T11:23:15.709606Z",
+  "python_version": "3.13.5 (tags/v3.13.5:6cb20a2, Jun 11 2025, 16:15:46) [MSC v.1943 64 bit (AMD64)]"
+}
