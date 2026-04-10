@@ -44,6 +44,9 @@ paper/
   20260401_PrimeSpectrum.pdf       <- Compiled PDF
   20260401_PrimeSpectrum.pdf.ots   <- OpenTimestamps proof
 
+demo/
+  numbers-are-information.html     <- Interactive single-file demo (open in browser)
+
 experiments/
   EXPERIMENT_INDEX.md              <- Complete experiment index
   conftest.py                      <- pytest configuration
@@ -56,6 +59,13 @@ experiments/
 INVENTION_DISCLOSURE_PrimeSpectrum.pdf  <- Signed invention disclosure
 README.md                          <- This document
 ```
+
+---
+
+## Interactive Demo
+
+Open `demo/numbers-are-information.html` in any browser — no server, no dependencies.
+Classifies any natural number, shows its SpectralAddress, Cayley table, and resonance structure.
 
 ---
 
