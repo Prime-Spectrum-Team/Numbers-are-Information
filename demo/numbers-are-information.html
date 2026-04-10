@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Numbers Are Information — PrimeSpec Classification</title>
+    <meta name="description" content="Every natural number encodes intrinsic structural information through its prime factorization. Interactive demo for the PrimeSpec classification framework.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --bg2: #12121a;
+            --bg3: #1a1a2e;
+            --surface: #16213e;
+            --accent1: #e94560;
+            --accent2: #0f3460;
+            --accent3: #533483;
+            --gold: #f0c040;
+            --cyan: #00d4ff;
+            --green: #00ff88;
+            --purple: #a855f7;
+            --text: #e8e8f0;
+            --text2: #9898b0;
+            --glass: rgba(255,255,255,0.04);
+            --glass2: rgba(255,255,255,0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 50%, rgba(83,52,131,0.15) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 30%, rgba(233,69,96,0.1) 0%, transparent 50%),
+                        radial-gradient(ellipse at 50% 80%, rgba(0,212,255,0.08) 0%, transparent 50%);
+            animation: bgPulse 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes bgPulse {
+            from { transform: scale(1) rotate(0deg); }
+            to { transform: scale(1.05) rotate(2deg); }
+        }
+
+        .hero-content { position: relative; z-index: 2; max-width: 900px; }
+
+        .hero-tag {
+            display: inline-block;
+            padding: 0.4rem 1.2rem;
+            border: 1px solid var(--accent1);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent1);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero h1 .gradient-text {
+            background: linear-gradient(135deg, var(--cyan), var(--purple), var(--accent1));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text2);
+            max-width: 650px;
+            margin: 0 auto 3rem;
+            line-height: 1.7;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .hero-cta {
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+
+        .hero-cta button {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent1), var(--accent3));
+            color: white;
+            margin-right: 1rem;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(233,69,96,0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass2);
+            color: var(--text);
+            border: 1px solid rgba(255,255,255,0.1) !important;
+            backdrop-filter: blur(10px);
+        }
+        .btn-secondary:hover {
+            background: var(--glass);
+            border-color: var(--cyan) !important;
+            color: var(--cyan);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* SCROLL INDICATOR */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            z-index: 2;
+        }
+        .scroll-indicator svg { width: 30px; height: 30px; fill: var(--text2); }
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        /* SECTIONS */
+        section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--accent1);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            text-align: center;
+        }
+
+        .section-desc {
+            font-size: 1.1rem;
+            color: var(--text2);
+            max-width: 700px;
+            line-height: 1.7;
+            margin-bottom: 3rem;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* OLD VS NEW */
+        .paradigm-shift {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 2rem;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            .paradigm-shift {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .paradigm-card {
+            padding: 2.5rem;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .old-way {
+            background: linear-gradient(135deg, rgba(255,50,50,0.08), rgba(255,50,50,0.02));
+            border: 1px solid rgba(255,50,50,0.15);
+        }
+
+        .new-way {
+            background: linear-gradient(135deg, rgba(0,255,136,0.08), rgba(0,212,255,0.05));
+            border: 1px solid rgba(0,255,136,0.15);
+        }
+
+        .paradigm-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .paradigm-card .example {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .old-way .example {
+            background: rgba(255,50,50,0.06);
+            color: var(--text2);
+        }
+
+        .new-way .example {
+            background: rgba(0,255,136,0.06);
+            color: var(--green);
+        }
+
+        .paradigm-card .desc {
+            color: var(--text2);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .arrow-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--cyan);
+            animation: pulseArrow 2s infinite;
+        }
+
+        @keyframes pulseArrow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* INTERACTIVE EXPLORER */
+        .explorer {
+            background: var(--bg2);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 24px;
+            padding: 3rem;
+            margin: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .explorer::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent1), var(--cyan), var(--purple));
+        }
+
+        .explorer-input-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            align-items: stretch;
+        }
+
+        .explorer-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            font-size: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            background: var(--bg);
+            border: 2px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            color: var(--text);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .explorer-input:focus {
+            border-color: var(--cyan);
+            box-shadow: 0 0 20px rgba(0,212,255,0.15);
+        }
+
+        .explorer-input::placeholder {
+            color: var(--text2);
+            font-weight: 400;
+            font-size: 1rem;
+        }
+
+        .explore-btn {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--cyan), var(--purple));
+            border: none;
+            border-radius: 14px;
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .explore-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,212,255,0.3);
+        }
+
+        /* RESULT DISPLAY */
+        .result-area {
+            display: none;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .result-area.visible { display: block; }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .result-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--cyan), var(--green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .result-class-badge {
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        .result-factorization {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.2rem;
+            color: var(--text2);
+        }
+
+        /* SA VISUALIZATION */
+        .sa-viz {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 0.75rem;
+            margin: 2rem 0;
+        }
+
+        .sa-axis {
+            text-align: center;
+            padding: 1rem 0.5rem;
+            border-radius: 14px;
+            background: var(--bg);
+            border: 1px solid rgba(255,255,255,0.04);
+            transition: all 0.3s ease;
+        }
+
+        .sa-axis.active {
+            border-color: var(--cyan);
+            box-shadow: 0 0 15px rgba(0,212,255,0.15);
+        }
+
+        .sa-axis .prime {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text2);
+            margin-bottom: 0.3rem;
+        }
+
+        .sa-axis .value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem;
+            font-weight: 900;
+        }
+
+        .sa-axis.active .value {
+            color: var(--cyan);
+        }
+
+        .sa-axis .label {
+            font-size: 0.65rem;
+            color: var(--text2);
+            margin-top: 0.3rem;
+        }
+
+        /* CAYLEY TABLE */
+        .cayley-section {
+            margin: 4rem auto;
+        }
+
+        .cayley-table-container {
+            overflow-x: auto;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .cayley-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        .cayley-table th, .cayley-table td {
+            padding: 0.8rem;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .cayley-table th {
+            background: var(--bg3);
+            font-weight: 700;
+            color: var(--cyan);
+        }
+
+        .cayley-table td {
+            background: var(--bg2);
+            transition: all 0.2s ease;
+        }
+
+        .cayley-table tr:hover td {
+            background: rgba(0,212,255,0.05);
+        }
+
+        .cayley-table .cell-s0 { color: var(--gold); }
+        .cayley-table .cell-s1 { color: #ff9f43; }
+        .cayley-table .cell-s2 { color: #a29bfe; }
+        .cayley-table .cell-s3 { color: #fd79a8; }
+        .cayley-table .cell-s4 { color: #55efc4; }
+        .cayley-table .cell-s5 { color: var(--cyan); }
+        .cayley-table .cell-s6 { color: var(--accent1); }
+
+        /* COMPARISON TABLE */
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .comparison-card {
+            padding: 2rem;
+            border-radius: 16px;
+            background: var(--glass);
+            border: 1px solid rgba(255,255,255,0.06);
+            transition: all 0.3s ease;
+        }
+
+        .comparison-card:hover {
+            border-color: rgba(0,212,255,0.2);
+            transform: translateY(-4px);
+        }
+
+        .comparison-card .metric {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+
+        .comparison-card .metric-label {
+            font-size: 0.85rem;
+            color: var(--text2);
+            margin-bottom: 1rem;
+        }
+
+        .comparison-card .metric-desc {
+            font-size: 0.8rem;
+            color: var(--text2);
+            line-height: 1.5;
+        }
+
+        /* GCD DEMO */
+        .gcd-demo {
+            background: var(--bg2);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin: 3rem 0;
+        }
+
+        .gcd-inputs {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .gcd-input {
+            width: 120px;
+            padding: 0.8rem 1rem;
+            font-size: 1.3rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            background: var(--bg);
+            border: 2px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            color: var(--text);
+            outline: none;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .gcd-input:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 15px rgba(0,255,136,0.15);
+        }
+
+        .gcd-operator {
+            font-size: 1.5rem;
+            color: var(--text2);
+        }
+
+        .gcd-result {
+            text-align: center;
+        }
+
+        .gcd-result-grid {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr auto 1fr;
+            gap: 1rem;
+            align-items: start;
+            margin-top: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .gcd-result-grid {
+                grid-template-columns: 1fr;
+            }
+            .gcd-arrow { display: none; }
+        }
+
+        .gcd-vector {
+            text-align: center;
+        }
+
+        .gcd-vector .label {
+            font-size: 0.75rem;
+            color: var(--text2);
+            margin-bottom: 0.5rem;
+        }
+
+        .gcd-vector .values {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            padding: 0.8rem;
+            background: var(--bg);
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .gcd-arrow {
+            font-size: 1.5rem;
+            color: var(--cyan);
+            align-self: center;
+            margin-top: 1.5rem;
+        }
+
+        /* QUOTE BLOCK */
+        .manifesto-quote {
+            text-align: center;
+            padding: 4rem 2rem;
+            margin: 4rem 0;
+            position: relative;
+        }
+
+        .manifesto-quote blockquote {
+            font-size: clamp(1.3rem, 3vw, 2rem);
+            font-weight: 300;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            font-style: italic;
+            color: var(--text);
+        }
+
+        .manifesto-quote blockquote strong {
+            font-weight: 700;
+            color: var(--cyan);
+            font-style: normal;
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            color: var(--text2);
+            font-size: 0.85rem;
+        }
+
+        footer a {
+            color: var(--cyan);
+            text-decoration: none;
+        }
+
+        /* PRIMES BACKGROUND */
+        .primes-bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.03;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: var(--cyan);
+            overflow: hidden;
+            line-height: 1.8;
+            word-spacing: 1.5rem;
+        }
+
+        /* CLASS COLORS */
+        .class-unit { color: var(--gold); }
+        .class-solar { color: #ff9f43; }
+        .class-lunar { color: #a29bfe; }
+        .class-dyadic { color: #fd79a8; }
+        .class-triadic { color: #55efc4; }
+        .class-semiprime { color: var(--cyan); }
+        .class-multiprime { color: var(--accent1); }
+
+        .badge-unit { background: rgba(240,192,64,0.15); color: var(--gold); }
+        .badge-solar { background: rgba(255,159,67,0.15); color: #ff9f43; }
+        .badge-lunar { background: rgba(162,155,254,0.15); color: #a29bfe; }
+        .badge-dyadic { background: rgba(253,121,168,0.15); color: #fd79a8; }
+        .badge-triadic { background: rgba(85,239,196,0.15); color: #55efc4; }
+        .badge-semiprime { background: rgba(0,212,255,0.15); color: var(--cyan); }
+        .badge-multiprime { background: rgba(233,69,96,0.15); color: var(--accent1); }
+
+        /* SEVEN CLASSES GRID */
+        .classes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .class-card {
+            padding: 1.5rem 1rem;
+            border-radius: 14px;
+            text-align: center;
+            background: var(--glass);
+            border: 1px solid rgba(255,255,255,0.04);
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .class-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255,255,255,0.12);
+        }
+
+        .class-card .class-icon {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .class-card .class-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .class-card .class-def {
+            font-size: 0.7rem;
+            color: var(--text2);
+            line-height: 1.4;
+        }
+
+        .class-card .class-pct {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            margin-top: 0.5rem;
+            color: var(--text2);
+        }
+
+        /* LIVE COUNTER */
+        .live-stream {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 2rem 0;
+            min-height: 50px;
+        }
+
+        .live-number {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.3rem 0.7rem;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 600;
+            animation: popIn 0.3s ease-out;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .class-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="primes-bg" id="primesBg"></div>
+
+<!-- HERO -->
+<div class="hero" id="hero">
+    <div class="hero-content">
+        <div class="hero-tag">PrimeSpec Classification</div>
+        <h1>Numbers Are Not Just Quantities.<br><span class="gradient-text">Numbers Are Information.</span></h1>
+        <p>Every natural number encodes intrinsic structural information through its prime factorization. <strong>60</strong> = 2²×3×5 has SpectralAddress <strong>[2,1,1,0,0,0,0]</strong> — a coordinate in 7-dimensional prime space. This information is deterministic, compositional, and computable.</p>
+        <div class="hero-cta">
+            <button class="btn-primary" onclick="document.getElementById('explore').scrollIntoView({behavior:'smooth'})">Explore a Number →</button>
+            <button class="btn-secondary" onclick="document.getElementById('paradigm').scrollIntoView({behavior:'smooth'})">Why This Matters</button>
+        </div>
+    </div>
+    <div class="scroll-indicator">
+        <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+    </div>
+</div>
+
+<!-- PARADIGM SHIFT -->
+<section id="paradigm">
+    <div class="section-label">Complementary Viewpoint</div>
+    <div class="section-title">From Ordinals to Coordinates</div>
+    <div class="section-desc">The standard view treats integers as ordinal positions. The complementary view developed here treats each number as a coordinate in prime space — its factorization encodes information that is intrinsic, deterministic, and compositional.</div>
+
+    <div class="paradigm-shift">
+        <div class="paradigm-card old-way">
+            <h3>❌ Standard View</h3>
+            <div class="example">60 = sixty units</div>
+            <div class="desc">A number is an ordinal position. Its operationally relevant property is magnitude. To compare 60 and 18, you subtract: |60 − 18| = 42. This tells you the distance but nothing about their structural relationship.</div>
+        </div>
+        <div class="arrow-divider">→</div>
+        <div class="paradigm-card new-way">
+            <h3>✅ Complementary View</h3>
+            <div class="example">60 = [2,1,1,0,0,0,0]</div>
+            <div class="desc">A number is a <strong>coordinate in prime space</strong>. 60 = 2²×3×5 → SpectralAddress [2,1,1,0,0,0,0]. Its factorization determines what it <strong>resonates with</strong> (shared prime factors), what it's <strong>coprime to</strong>, and which <strong>arithmetic class</strong> it belongs to.</div>
+        </div>
+    </div>
+
+    <div class="manifesto-quote">
+        <blockquote>"These are not properties <strong>about</strong> 60; they are properties 60 <strong>is</strong>."<br><small style="font-size:0.6em; color:var(--text2);">— from the paper, Section 1</small></blockquote>
+    </div>
+</section>
+
+<!-- SEVEN CLASSES -->
+<section>
+    <div class="section-label">The Seven-Class Partition</div>
+    <div class="section-title">Arithmetic Classification of Every Number</div>
+    <div class="section-desc">Every natural number belongs to exactly one of 7 arithmetic classes, based on two invariants: the total prime factor count Ω(n) and the residue class of primes modulo 6. This partition is exhaustive and forms a finite commutative monoid (S, ⊗) under induced multiplication.</div>
+
+    <div class="classes-grid">
+        <div class="class-card">
+            <div class="class-icon class-unit">◆</div>
+            <div class="class-name class-unit">S₀ Unit</div>
+            <div class="class-def">n = 1<br>Identity element</div>
+            <div class="class-pct">0.01%</div>
+        </div>
+        <div class="class-card">
+            <div class="class-icon class-solar">☀</div>
+            <div class="class-name class-solar">S₁ Solar</div>
+            <div class="class-def">Prime, p ≡ 1 (mod 6)<br>7, 13, 19, 31…</div>
+            <div class="class-pct">6.1%</div>
+        </div>
+        <div class="class-card">
+            <div class="class-icon class-lunar">☾</div>
+            <div class="class-name class-lunar">S₂ Lunar</div>
+            <div class="class-def">Prime, p ≡ 5 (mod 6)<br>5, 11, 17, 23…</div>
+            <div class="class-pct">6.2%</div>
+        </div>
+        <div class="class-card">
+            <div class="class-icon class-dyadic">②</div>
+            <div class="class-name class-dyadic">S₃ Dyadic</div>
+            <div class="class-def">n = 2<br>The even prime</div>
+            <div class="class-pct">0.01%</div>
+        </div>
+        <div class="class-card">
+            <div class="class-icon class-triadic">③</div>
+            <div class="class-name class-triadic">S₄ Triadic</div>
+            <div class="class-def">n = 3<br>The triple prime</div>
+            <div class="class-pct">0.01%</div>
+        </div>
+        <div class="class-card">
+            <div class="class-icon class-semiprime">◎</div>
+            <div class="class-name class-semiprime">S₅ Semiprime</div>
+            <div class="class-def">Ω(n) = 2<br>4, 6, 9, 10, 14…</div>
+            <div class="class-pct">26.2%</div>
+        </div>
+        <div class="class-card">
+            <div class="class-icon class-multiprime">✦</div>
+            <div class="class-name class-multiprime">S₆ Multiprime</div>
+            <div class="class-def">Ω(n) ≥ 3 (absorbing)<br>8, 12, 24…</div>
+            <div class="class-pct">61.5%</div>
+        </div>
+    </div>
+
+    <div style="text-align:center; margin-top:1rem;">
+        <div class="section-label">Live Classification</div>
+        <div class="live-stream" id="liveStream"></div>
+    </div>
+</section>
+
+<!-- INTERACTIVE EXPLORER -->
+<section id="explore">
+    <div class="section-label">Interactive Explorer</div>
+    <div class="section-title">Enter Any Number. See Its Classification.</div>
+    <div class="section-desc">Type a number and compute its SpectralAddress SA(n) = (ν₂(n), ν₃(n), …, ν₁₇(n)) — the p-adic valuation vector over the default basis B = (2,3,5,7,11,13,17). Lossless for B-smooth integers.</div>
+
+    <div class="explorer">
+        <div class="explorer-input-group">
+            <input type="number" class="explorer-input" id="numberInput" placeholder="Type any number…" min="1" max="999999999" value="60">
+            <button class="explore-btn" onclick="exploreNumber()">Reveal Its Form →</button>
+        </div>
+
+        <div class="result-area" id="resultArea">
+            <div class="result-header">
+                <span class="result-number" id="resultNumber">60</span>
+                <span class="result-class-badge" id="resultBadge">S₆ Multiprime</span>
+                <span class="result-factorization" id="resultFactorization">= 2² × 3 × 5</span>
+            </div>
+
+            <div style="font-size:0.8rem; letter-spacing:3px; text-transform:uppercase; color:var(--text2); margin-bottom:0.5rem;">SpectralAddress — prime space coordinates</div>
+
+            <div class="sa-viz" id="saViz"></div>
+
+            <div style="margin-top:1.5rem; padding:1.5rem; background:var(--bg); border-radius:14px; border:1px solid rgba(255,255,255,0.04);">
+                <div style="font-size:0.8rem; color:var(--text2); margin-bottom:0.5rem;">What this means:</div>
+                <div id="resultInterpretation" style="line-height:1.7; font-size:0.95rem;"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- RESONANCE DEMO -->
+<section>
+    <div class="section-label">Resonance Relation</div>
+    <div class="section-title">Structural Co-Divisibility</div>
+    <div class="section-desc">Two numbers resonate when they share prime factors: R(i,j) = Ω(gcd(i,j)). This is computable in O(K) via component-wise minimum of their SpectralAddresses. Approximately 61% of integer pairs are non-resonant (coprime), matching the classical value 6/π².</div>
+
+    <div class="gcd-demo">
+        <div class="gcd-inputs">
+            <input type="number" class="gcd-input" id="gcdA" value="60" min="1" onchange="computeResonance()">
+            <span class="gcd-operator">⟷</span>
+            <input type="number" class="gcd-input" id="gcdB" value="18" min="1" onchange="computeResonance()">
+            <button class="explore-btn" onclick="computeResonance()" style="padding:0.8rem 1.5rem;">Compute Resonance</button>
+        </div>
+        <div class="gcd-result" id="gcdResult"></div>
+    </div>
+</section>
+
+<!-- CAYLEY TABLE -->
+<section class="cayley-section">
+    <div class="section-label">Multiplicative Monoid</div>
+    <div class="section-title">49 Laws. Zero Exceptions.</div>
+    <div class="section-desc">When you multiply two numbers, their classes follow deterministic laws — a complete Cayley table of a finite commutative monoid (S, ⊗). Verified on 200 pairs per entry (9,800 total), zero deviations.</div>
+
+    <div class="cayley-table-container">
+        <table class="cayley-table">
+            <thead>
+                <tr>
+                    <th>⊗</th><th>S₀ Unit</th><th>S₁ Solar</th><th>S₂ Lunar</th><th>S₃ Dyadic</th><th>S₄ Triad</th><th>S₅ Semi</th><th>S₆ Multi</th>
+                </tr>
+            </thead>
+            <tbody id="cayleyBody"></tbody>
+        </table>
+    </div>
+
+    <div style="margin-top:1.5rem; display:flex; gap:1rem; flex-wrap:wrap; justify-content:center;">
+        <div style="padding:0.5rem 1rem; border-radius:8px; background:var(--glass); font-size:0.8rem;">
+            <span class="class-unit">S₀</span> = Neutral element (S₀⊗C = C)
+        </div>
+        <div style="padding:0.5rem 1rem; border-radius:8px; background:var(--glass); font-size:0.8rem;">
+            <span class="class-multiprime">S₆</span> = Absorbing element (S₆⊗C = S₆)
+        </div>
+        <div style="padding:0.5rem 1rem; border-radius:8px; background:var(--glass); font-size:0.8rem;">
+            Idempotents: {S₀, S₆} only
+        </div>
+    </div>
+</section>
+
+<!-- WHY IT MATTERS -->
+<section>
+    <div class="section-label">Computational Verification</div>
+    <div class="section-title">Five Contributions — Three Implementations</div>
+
+    <div class="comparison">
+        <div class="comparison-card">
+            <div class="metric" style="color:var(--green);">6/π²</div>
+            <div class="metric-label">Coprime Sparsity</div>
+            <div class="metric-desc">~61% of integer pairs are non-resonant (coprime). Empirically verified for T up to 8,192 with deviation 0.0002 from the theoretical value.</div>
+        </div>
+        <div class="comparison-card">
+            <div class="metric" style="color:var(--cyan);">O(K)</div>
+            <div class="metric-label">Vector Operations</div>
+            <div class="metric-desc">Multiplication, GCD, LCM, and coprimality testing on B-smooth integers reduce to elementary vector operations on SpectralAddress vectors.</div>
+        </div>
+        <div class="comparison-card">
+            <div class="metric" style="color:var(--purple);">475M</div>
+            <div class="metric-label">Cayley Lookups/s</div>
+            <div class="metric-desc">C++20 benchmark: 475M ops/s (Intel Core i5), 559M ops/s (AMD Ryzen 9 3900). The Cayley table fits in 49 bytes.</div>
+        </div>
+        <div class="comparison-card">
+            <div class="metric" style="color:var(--accent1);">49</div>
+            <div class="metric-label">Bytes Total</div>
+            <div class="metric-desc">The complete monoid multiplication table — 7 classes, 49 entries. Verilog RTL proof of concept validated via 14/14 test vectors.</div>
+        </div>
+    </div>
+</section>
+
+<!-- CLOSING -->
+<section>
+    <div class="manifesto-quote">
+        <blockquote>"The prime factorization of any integer n > 1 encodes structural information that is <strong>intrinsic</strong>, <strong>deterministic</strong>, and <strong>compositional</strong>."<br><small style="font-size:0.6em; color:var(--text2);">— from the paper, Section 1</small></blockquote>
+    </div>
+    <div style="text-align:center; margin-top:2rem;">
+        <div class="section-label">PrimeSpec Classification</div>
+        <p style="color:var(--text2); margin-bottom: 2rem;">7 classes · 49 monoid laws · O(K) vector operations · 7 deterministic addition laws · Verified in Python, C++20 & Verilog RTL</p>
+        <p style="color:var(--text2); font-size:0.9rem;">Prime-Spectrum-Team · Version 1.1 · April 2026</p>
+    </div>
+</section>
+
+<footer>
+    <p>Numbers Are Information © Prime-Spectrum-Team, 2026</p>
+    <p style="margin-top:0.5rem;"><a href="https://github.com/Prime-Spectrum-Team/Numbers-are-Information-.git" target="_blank">GitHub Repository</a> · <a href="#">arXiv (coming soon)</a></p>
+</footer>
+
+<script>
+    // PRIMES
+    const PRIMES = [2, 3, 5, 7, 11, 13, 17];
+    const PRIME_LABELS = ['ν₂', 'ν₃', 'ν₅', 'ν₇', 'ν₁₁', 'ν₁₃', 'ν₁₇'];
+    const CLASS_NAMES = ['Unit', 'Solar', 'Lunar', 'Dyadic', 'Triadic', 'Semiprime', 'Multiprime'];
+    const CLASS_SYMBOLS = ['S₀', 'S₁', 'S₂', 'S₃', 'S₄', 'S₅', 'S₆'];
+    const CLASS_BADGES = ['badge-unit', 'badge-solar', 'badge-lunar', 'badge-dyadic', 'badge-triadic', 'badge-semiprime', 'badge-multiprime'];
+    const CLASS_COLORS = ['class-unit', 'class-solar', 'class-lunar', 'class-dyadic', 'class-triadic', 'class-semiprime', 'class-multiprime'];
+    const CLASS_HEX = ['#f0c040', '#ff9f43', '#a29bfe', '#fd79a8', '#55efc4', '#00d4ff', '#e94560'];
+
+    const CAYLEY = [
+        [0,1,2,3,4,5,6],
+        [1,5,5,5,5,6,6],
+        [2,5,5,5,5,6,6],
+        [3,5,5,5,5,6,6],
+        [4,5,5,5,5,6,6],
+        [5,6,6,6,6,6,6],
+        [6,6,6,6,6,6,6]
+    ];
+
+    function spectralAddress(n) {
+        const sa = [];
+        let rem = n;
+        for (const p of PRIMES) {
+            let count = 0;
+            while (rem % p === 0) { count++; rem = Math.floor(rem / p); }
+            sa.push(count);
+        }
+        return { sa, remainder: rem };
+    }
+
+    function omega(n) {
+        let count = 0;
+        let x = n;
+        for (let p = 2; p * p <= x; p++) {
+            while (x % p === 0) { count++; x = Math.floor(x / p); }
+        }
+        if (x > 1) count++;
+        return count;
+    }
+
+    function classify(n) {
+        if (n === 1) return 0; // Unit
+        if (n === 2) return 3; // Dyadic
+        if (n === 3) return 4; // Triadic
+        const om = omega(n);
+        if (om === 1) {
+            return (n % 6 === 1) ? 1 : 2; // Solar or Lunar
+        }
+        if (om === 2) return 5; // Semiprime
+        return 6; // Multiprime
+    }
+
+    function factorize(n) {
+        if (n === 1) return '1';
+        const factors = [];
+        let x = n;
+        for (let p = 2; p * p <= x; p++) {
+            let count = 0;
+            while (x % p === 0) { count++; x = Math.floor(x / p); }
+            if (count > 0) {
+                factors.push(count > 1 ? `${p}${superscript(count)}` : `${p}`);
+            }
+        }
+        if (x > 1) factors.push(`${x}`);
+        return factors.join(' × ');
+    }
+
+    function superscript(n) {
+        const sup = {'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};
+        return String(n).split('').map(c => sup[c] || c).join('');
+    }
+
+    function exploreNumber() {
+        const n = parseInt(document.getElementById('numberInput').value);
+        if (!n || n < 1 || n > 999999999) return;
+
+        const { sa, remainder } = spectralAddress(n);
+        const cls = classify(n);
+        const fact = factorize(n);
+
+        document.getElementById('resultNumber').textContent = n.toLocaleString();
+        const badge = document.getElementById('resultBadge');
+        badge.textContent = `${CLASS_SYMBOLS[cls]} ${CLASS_NAMES[cls]}`;
+        badge.className = `result-class-badge ${CLASS_BADGES[cls]}`;
+        document.getElementById('resultFactorization').textContent = `= ${fact}`;
+
+        // SA Visualization
+        const saViz = document.getElementById('saViz');
+        saViz.innerHTML = '';
+        sa.forEach((v, i) => {
+            const div = document.createElement('div');
+            div.className = `sa-axis ${v > 0 ? 'active' : ''}`;
+            div.innerHTML = `
+                <div class="prime">${PRIME_LABELS[i]}</div>
+                <div class="value" style="color:${v > 0 ? CLASS_HEX[i < 4 ? i+1 : 5] : 'rgba(255,255,255,0.15)'}">${v}</div>
+                <div class="label">axis ${PRIMES[i]}</div>
+            `;
+            saViz.appendChild(div);
+        });
+
+        if (remainder > 1) {
+            const div = document.createElement('div');
+            div.className = 'sa-axis active';
+            div.innerHTML = `<div class="prime">rem</div><div class="value" style="color:var(--text2)">${remainder}</div><div class="label">remainder</div>`;
+            saViz.appendChild(div);
+        }
+
+        // Interpretation
+        const activeAxes = sa.map((v,i) => v > 0 ? PRIMES[i] : null).filter(x => x);
+        const interp = document.getElementById('resultInterpretation');
+        let text = '';
+
+        if (n === 1) {
+            text = `<strong>1</strong> is the <span class="class-unit">Unit</span> (S₀) — the neutral element of the monoid. S₀ ⊗ C = C for all classes. Ω(1) = 0.`;
+        } else if (cls <= 4) {
+            const modInfo = cls === 1 ? ', p ≡ 1 (mod 6)' : cls === 2 ? ', p ≡ 5 (mod 6)' : '';
+            text = `<strong>${n}</strong> is a <span class="${CLASS_COLORS[cls]}">${CLASS_NAMES[cls]}</span> prime (${CLASS_SYMBOLS[cls]}${modInfo}). Ω(${n}) = 1. By the Universality Theorem, ${n}³ reaches the absorbing class S₆ (k ≤ 3 for all primes).`;
+        } else if (cls === 5) {
+            text = `<strong>${n}</strong> is a <span class="class-semiprime">Semiprime</span> (S₅) — Ω(${n}) = 2. Active prime axes: ${activeAxes.join(', ')}. One multiplication by any non-unit maps it to S₆ irreversibly (S₅ ⊗ C = S₆ for C ≠ S₀).`;
+        } else {
+            text = `<strong>${n}</strong> is a <span class="class-multiprime">Multiprime</span> (S₆) — Ω(${n}) = ${omega(n)} ≥ 3. Active prime axes: ${activeAxes.join(', ')}. S₆ is the absorbing element: S₆ ⊗ C = S₆ for all C.`;
+        }
+
+        text += `<br><br><strong>SpectralAddress:</strong> <code style="color:var(--cyan);font-family:'JetBrains Mono'">[${sa.join(', ')}]</code>${remainder > 1 ? ` + remainder ${remainder}` : ''}`;
+        interp.innerHTML = text;
+
+        document.getElementById('resultArea').classList.add('visible');
+    }
+
+    function computeResonance() {
+        const a = parseInt(document.getElementById('gcdA').value) || 1;
+        const b = parseInt(document.getElementById('gcdB').value) || 1;
+        const saA = spectralAddress(a);
+        const saB = spectralAddress(b);
+        const saMin = saA.sa.map((v, i) => Math.min(v, saB.sa[i]));
+        const resonance = saMin.reduce((s, v) => s + v, 0);
+
+        const container = document.getElementById('gcdResult');
+        container.innerHTML = `
+            <div class="gcd-result-grid">
+                <div class="gcd-vector">
+                    <div class="label">SA(${a}) = ${a} = ${factorize(a)}</div>
+                    <div class="values">[${saA.sa.join(', ')}]</div>
+                </div>
+                <div class="gcd-arrow">∩</div>
+                <div class="gcd-vector">
+                    <div class="label">SA(${b}) = ${b} = ${factorize(b)}</div>
+                    <div class="values">[${saB.sa.join(', ')}]</div>
+                </div>
+                <div class="gcd-arrow">=</div>
+                <div class="gcd-vector">
+                    <div class="label" style="color:${resonance > 0 ? 'var(--green)' : 'var(--accent1)'}">
+                        ${resonance > 0 ? '✓ RESONANCE = ' + resonance : '✗ INDEPENDENT'}
+                    </div>
+                    <div class="values" style="border-color:${resonance > 0 ? 'var(--green)' : 'var(--accent1)'}; color:${resonance > 0 ? 'var(--green)' : 'var(--accent1)'}">
+                        min → [${saMin.join(', ')}]
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top:1.5rem; font-size:0.9rem; color:var(--text2);">
+                ${resonance > 0
+                    ? `These numbers <strong style="color:var(--green)">share ${resonance} prime factor${resonance > 1 ? 's' : ''}</strong> — they are structurally co-divisible (resonant). R(i,j) = Ω(gcd(i,j)) = ${resonance}.`
+                    : `These numbers are <strong style="color:var(--accent1)">coprime</strong> — gcd = 1, R(i,j) = 0. No shared prime factors. ~61% of all integer pairs have this property (6/π²).`
+                }
+                <br>Computation: <strong>O(K)</strong> — component-wise minimum of ${PRIMES.length} coordinates.
+            </div>
+        `;
+    }
+
+    // CAYLEY TABLE
+    function buildCayley() {
+        const body = document.getElementById('cayleyBody');
+        const labels = ['S₀ Unit', 'S₁ Solar', 'S₂ Lunar', 'S₃ Dyadic', 'S₄ Triad', 'S₅ Semi', 'S₆ Multi'];
+        CAYLEY.forEach((row, i) => {
+            const tr = document.createElement('tr');
+            const th = document.createElement('th');
+            th.textContent = labels[i];
+            tr.appendChild(th);
+            row.forEach(cls => {
+                const td = document.createElement('td');
+                td.textContent = CLASS_SYMBOLS[cls];
+                td.className = `cell-s${cls}`;
+                tr.appendChild(td);
+            });
+            body.appendChild(tr);
+        });
+    }
+
+    // LIVE STREAM
+    let streamCounter = 1;
+    function addLiveNumber() {
+        const container = document.getElementById('liveStream');
+        if (container.children.length > 25) container.removeChild(container.firstChild);
+        const n = streamCounter++;
+        const cls = classify(n);
+        const el = document.createElement('span');
+        el.className = 'live-number';
+        el.style.background = `${CLASS_HEX[cls]}15`;
+        el.innerHTML = `<span class="class-dot" style="background:${CLASS_HEX[cls]}"></span><span style="color:${CLASS_HEX[cls]}">${n}</span>`;
+        container.appendChild(el);
+    }
+
+    // PRIMES BACKGROUND
+    function buildPrimesBg() {
+        const el = document.getElementById('primesBg');
+        const primes = [];
+        for (let i = 2; primes.length < 500; i++) {
+            if (omega(i) === 1) primes.push(i);
+        }
+        el.textContent = primes.join('  ');
+    }
+
+    // INIT
+    document.addEventListener('DOMContentLoaded', () => {
+        buildCayley();
+        buildPrimesBg();
+        exploreNumber();
+        computeResonance();
+
+        setInterval(addLiveNumber, 250);
+
+        document.getElementById('numberInput').addEventListener('keydown', e => {
+            if (e.key === 'Enter') exploreNumber();
+        });
+    });
+</script>
+</body>
+</html>
