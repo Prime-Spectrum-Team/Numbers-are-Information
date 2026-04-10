@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+title: >-
+  Arithmetic Classification and Multiplicative Monoid Structure of Natural
+  Numbers: A Seven-Class Partition, Prime Coordinate Representation, and
+  Deterministic Addition Laws
+message: >-
+  If you use this work, please cite it using the metadata from this file.
+type: article
+authors:
+  - name: Prime-Spectrum-Team
+    website: https://github.com/MasterSpectrumPrime
+date-released: "2026-04-10"
+version: "1.1"
+license:
+  - Apache-2.0
+  - CC-BY-4.0
+repository-code: https://github.com/Prime-Spectrum-Team/Numbers-are-Information
+keywords:
+  - number-theory
+  - prime-numbers
+  - spectral-analysis
+  - arithmetic-classification
+  - multiplicative-monoid
+abstract: >-
+  Natural numbers are conventionally treated as ordered magnitudes. This paper
+  develops a complementary framework: every natural number n encodes intrinsic
+  structural information through its prime factorization -- independent of
+  magnitude and computable in deterministic, finite time. Five contributions
+  include a seven-class partition with multiplicative monoid, power dynamics
+  universality, deterministic addition laws, SpectralAddress representation,
+  and a resonance relation with approximately 61% non-resonant pairs.
