@@ -38,6 +38,12 @@ from exp_hw_exact_spectral import (
 # ============================================================================
 # DATA
 # ============================================================================
+# Tiny Shakespeare dataset fetched from Andrej Karpathy's char-rnn repository.
+# Source:  https://github.com/karpathy/char-rnn (MIT License, © 2015 Andrej Karpathy)
+# License: https://github.com/karpathy/char-rnn/blob/master/LICENSE.md
+# The underlying Shakespeare text is public domain; the MIT-licensed file is
+# downloaded at runtime and NOT redistributed with this repository.
+# See NOTICE for the full third-party attribution.
 DATA_FILE = os.path.join(SCRIPT_DIR, "input.txt")
 if not os.path.exists(DATA_FILE):
     import urllib.request
