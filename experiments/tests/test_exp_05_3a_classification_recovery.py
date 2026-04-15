@@ -71,13 +71,18 @@ def binomial_ci(successes, total, confidence=0.95):
 # =============================================================================
 
 def generate_b_smooth_integer(seed=None):
-    """Generate a random B-smooth integer using basis primes."""
-    if seed is not None:
-        random.seed(seed)
+    """Generate a random B-smooth integer using basis primes.
+
+    Each basis prime (2,3,5,7,11,13,17) gets an exponent drawn uniformly
+    from {0,1,2,3,4}.  The sample space has exactly 5^7 = 78,125 distinct
+    values, so 100,000 draws yield ~56k unique integers (birthday effect).
+    """
+    # B5: use a local Random instance instead of polluting the global state
+    rng = random.Random(seed)
 
     result = 1
     for prime_idx in range(len(BASIS)):
-        exponent = random.randint(0, 4)
+        exponent = rng.randint(0, 4)
         result *= BASIS[prime_idx] ** exponent
 
     return result
@@ -85,7 +90,8 @@ def generate_b_smooth_integer(seed=None):
 def run_classification_recovery_experiment():
     print("\n" + "="*70)
     print("  EXP-5.3: Classification Recovery from SpectralAddress")
-    print("  N = {:,} B-smooth integers [1, 100,000]".format(N_SAMPLES))
+    print("  {:,} B-smooth generations, basis {{2,3,5,7,11,13,17}}, exponents 0-4"
+          " -> ~56k unique values (5^7={:,} sample space)".format(N_SAMPLES, 5**7))
     print("="*70)
 
     t0 = time.time()
@@ -141,7 +147,10 @@ def run_classification_recovery_experiment():
     elapsed = time.time() - t0
 
     # Compute statistics
-    agreement_rate, ci_lo, ci_hi = binomial_ci(agreements, N_SAMPLES)
+    # B1 fix: use actual_count (unique B-smooth integers tested) as the
+    # denominator, NOT N_SAMPLES (=100,000 raw draws before deduplication).
+    # Using N_SAMPLES wrongly reported agreement_rate ~0.563 instead of 1.0.
+    agreement_rate, ci_lo, ci_hi = binomial_ci(agreements, actual_count)
 
     # =================================================================
     # Print Results
@@ -151,8 +160,8 @@ def run_classification_recovery_experiment():
     print(f"\n  {'='*70}")
     print(f"  CLASSIFICATION AGREEMENT")
     print(f"  {'='*70}")
-    print(f"  Tested: {N_SAMPLES:,} integers")
-    print(f"  Agreements: {agreements:,} / {N_SAMPLES:,}")
+    print(f"  Tested: {actual_count:,} unique B-smooth integers (from {N_SAMPLES:,} draws)")
+    print(f"  Agreements: {agreements:,} / {actual_count:,}")
     print(f"  Disagreements: {disagreements:,}")
     print(f"  Agreement rate: {agreement_rate:.8f}")
     print(f"  95% CI: [{ci_lo:.8f}, {ci_hi:.8f}]")

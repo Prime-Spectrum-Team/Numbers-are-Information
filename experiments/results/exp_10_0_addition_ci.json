@@ -4,10 +4,12 @@
   "max_val": 1000000,
   "summary": {
     "total_pairs": 28,
-    "deterministic": 8,
-    "probabilistic": 20,
-    "max_ci_width": 0.006156844993659649,
-    "time_seconds": 11.719797849655151
+    "deterministic": 7,
+    "deterministic_non_trivial": 1,
+    "deterministic_trivial": 6,
+    "probabilistic": 21,
+    "max_ci_width": 0.00615684499365976,
+    "time_seconds": 22.78414487838745
   },
   "passed": "True",
   "results": {
@@ -18,6 +20,7 @@
       "b_name": "Unit",
       "n_samples": 100000,
       "is_deterministic": true,
+      "is_trivial": true,
       "distribution": {
         "3": {
           "count": 100000,
@@ -35,20 +38,21 @@
       "b_name": "Solar",
       "n_samples": 100000,
       "is_deterministic": false,
+      "is_trivial": false,
       "distribution": {
         "5": {
           "count": 12875,
           "probability": 0.12875,
-          "ci_95_lo": 0.1266799516621097,
-          "ci_95_hi": 0.1308416068618142,
-          "ci_width": 0.004161655199704489
+          "ci_95_lo": 0.12667995166210969,
+          "ci_95_hi": 0.13084160686181426,
+          "ci_width": 0.0041616551997045725
         },
         "6": {
           "count": 87125,
           "probability": 0.87125,
           "ci_95_lo": 0.8691583931381858,
-          "ci_95_hi": 0.8733200483378902,
-          "ci_width": 0.0041616551997044615
+          "ci_95_hi": 0.8733200483378903,
+          "ci_width": 0.0041616551997045725
         }
       }
     },
@@ -58,21 +62,22 @@
       "a_name": "Unit",
       "b_name": "Lunar",
       "n_samples": 100000,
-      "is_deterministic": true,
+      "is_deterministic": false,
+      "is_trivial": false,
       "distribution": {
         "5": {
           "count": 11,
           "probability": 0.00011,
           "ci_95_lo": 5.4912841664576154e-05,
-          "ci_95_hi": 0.00019681184115254098,
-          "ci_width": 0.00014189899948796483
+          "ci_95_hi": 0.0001968118411525781,
+          "ci_width": 0.00014189899948800194
         },
         "6": {
           "count": 99989,
           "probability": 0.99989,
-          "ci_95_lo": 0.9998031881588475,
+          "ci_95_lo": 0.9998031881588474,
           "ci_95_hi": 0.9999450871583354,
-          "ci_width": 0.00014189899948791052
+          "ci_width": 0.00014189899948802154
         }
       }
     },
@@ -83,6 +88,7 @@
       "b_name": "Dyadic",
       "n_samples": 100000,
       "is_deterministic": true,
+      "is_trivial": true,
       "distribution": {
         "4": {
           "count": 100000,
@@ -100,6 +106,7 @@
       "b_name": "Triadic",
       "n_samples": 100000,
       "is_deterministic": true,
+      "is_trivial": true,
       "distribution": {
         "5": {
           "count": 100000,
@@ -117,13 +124,14 @@
       "b_name": "Semiprime",
       "n_samples": 100000,
       "is_deterministic": false,
+      "is_trivial": false,
       "distribution": {
         "1": {
           "count": 1,
           "probability": 1e-05,
-          "ci_95_lo": 2.531780477933316e-07,
-          "ci_95_hi": 5.571516034774275e-05,
-          "ci_width": 5.546198229994942e-05
+          "ci_95_lo": 2.5317804779333164e-07,
+          "ci_95_hi": 5.571516034775618e-05,
+          "ci_width": 5.546198229996285e-05
         },
         "2": {
           "count": 2586,
@@ -155,34 +163,35 @@
       "b_name": "Multiprime",
       "n_samples": 100000,
       "is_deterministic": false,
+      "is_trivial": false,
       "distribution": {
         "1": {
           "count": 7514,
           "probability": 0.07514,
           "ci_95_lo": 0.07351345305958623,
-          "ci_95_hi": 0.07679123980408743,
-          "ci_width": 0.0032777867445012016
+          "ci_95_hi": 0.07679123980408747,
+          "ci_width": 0.003277786744501243
         },
         "2": {
           "count": 6405,
           "probability": 0.06405,
-          "ci_95_lo": 0.06254014145217238,
-          "ci_95_hi": 0.06558520379410188,
+          "ci_95_lo": 0.06254014145217236,
+          "ci_95_hi": 0.06558520379410186,
           "ci_width": 0.0030450623419294998
         },
         "5": {
           "count": 29678,
           "probability": 0.29678,
-          "ci_95_lo": 0.29394946247783627,
-          "ci_95_hi": 0.2996223285147131,
-          "ci_width": 0.0056728660368768336
+          "ci_95_lo": 0.2939494624778362,
+          "ci_95_hi": 0.2996223285147132,
+          "ci_width": 0.005672866036877
         },
         "6": {
           "count": 56403,
           "probability": 0.56403,
-          "ci_95_lo": 0.5609497203077286,
+          "ci_95_lo": 0.5609497203077285,
           "ci_95_hi": 0.5671065653013883,
-          "ci_width": 0.006156844993659649
+          "ci_width": 0.00615684499365976
         }
       }
     },
@@ -193,12 +202,13 @@
       "b_name": "Solar",
       "n_samples": 100000,
       "is_deterministic": false,
+      "is_trivial": false,
       "distribution": {
         "5": {
           "count": 11595,
           "probability": 0.11595,
-          "ci_95_lo": 0.11397179169757901,
-          "ci_95_hi": 0.1179505133906178,
+          "ci_95_lo": 0.113971791697579,
+          "ci_95_hi": 0.11795051339061778,
           "ci_width": 0.003978721693038784
         },
         "6": {
@@ -217,6 +227,7 @@
       "b_name": "Lunar",
       "n_samples": 100000,
       "is_deterministic": true,
+      "is_trivial": false,
       "distribution": {
         "6": {
           "count": 100000,
@@ -234,13 +245,14 @@
       "b_name": "Dyadic",
       "n_samples": 100000,
       "is_deterministic": false,
+      "is_trivial": false,
       "distribution": {
         "5": {
           "count": 17523,
           "probability": 0.17523,
           "ci_95_lo": 0.17287820785366417,
-          "ci_95_hi": 0.17760064443799717,
-          "ci_width": 0.004722436584332995
+          "ci_95_hi": 0.17760064443799714,
+          "ci_width": 0.004722436584332967
         },
         "6": {
           "count": 82477,
@@ -258,13 +270,14 @@
       "b_name": "Triadic",
       "n_samples": 100000,
       "is_deterministic": false,
+      "is_trivial": false,
       "distribution": {
         "5": {
           "count": 13177,
           "probability": 0.13177,
-          "ci_95_lo": 0.12967930253279347,
+          "ci_95_lo": 0.12967930253279344,
           "ci_95_hi": 0.13388207995286244,
-          "ci_width": 0.0042027774200689705
+          "ci_width": 0.004202777420068998
         },
         "6": {
           "count": 86823,
@@ -282,6 +295,7 @@
       "b_name": "Semiprime",
       "n_samples": 100000,
       "is_deterministic": false,
+      "is_trivial": false,
       "distribution": {
         "2": {
           "count": 2388,
@@ -313,6 +327,7 @@
       "b_name": "Multiprime",
       "n_samples": 100000,
       "is_deterministic": false,
+      "is_trivial": false,
       "distribution": {
         "1": {
           "count": 6418,
@@ -325,8 +340,8 @@
           "count": 5540,
           "probability": 0.0554,
           "ci_95_lo": 0.05399007147321658,
-          "ci_95_hi": 0.05683578454865721,
-          "ci_width": 0.0028457130754406326
+          "ci_95_hi": 0.05683578454865722,
+          "ci_width": 0.0028457130754406396
         },
         "5": {
           "count": 27889,
@@ -338,8 +353,8 @@
         "6": {
           "count": 60153,
           "probability": 0.60153,
-          "ci_95_lo": 0.5984876790251812,
-          "ci_95_hi": 0.6045664310397368,
+          "ci_95_lo": 0.5984876790251813,
+          "ci_95_hi": 0.604566431039737,
           "ci_width": 0.006078752014555655
         }
       }
@@ -351,13 +366,14 @@
       "b_name": "Lunar",
       "n_samples": 100000,
       "is_deterministic": false,
+      "is_trivial": false,
       "distribution": {
         "5": {
           "count": 11605,
           "probability": 0.11605,
-          "ci_95_lo": 0.1140710455736936,
+          "ci_95_lo": 0.11407104557369359,
           "ci_95_hi": 0.11805125367889252,
-          "ci_width": 0.003980208105198918
+          "ci_width": 0.003980208105198932
         },
         "6": {
           "count": 88395,
@@ -375,13 +391,14 @@
       "b_name": "Dyadic",
       "n_samples": 100000,
       "is_deterministic": false,
+      "is_trivial": false,
       "distribution": {
         "1": {
           "count": 23936,
           "probability": 0.23936,
           "ci_95_lo": 0.2367179671672172,
-          "ci_95_hi": 0.24201715787442474,
-          "ci_width": 0.005299190707207524
+          "ci_95_hi": 0.2420171578744247,
+          "ci_width": 0.005299190707207496
         },
         "5": {
           "count": 42312,
@@ -406,20 +423,21 @@
       "b_name": "Triadic",
       "n_samples": 100000,
       "is_deterministic": false,
+      "is_trivial": false,
       "distribution": {
         "5": {
           "count": 12735,
           "probability": 0.12735,
-          "ci_95_lo": 0.12528965104243756,
-          "ci_95_hi": 0.1294319891011325,
+          "ci_95_lo": 0.12528965104243753,
+          "ci_95_hi": 0.12943198910113246,
           "ci_width": 0.004142338058694933
         },
         "6": {
           "count": 87265,
           "probability": 0.87265,
-          "ci_95_lo": 0.8705680108988675,
+          "ci_95_lo": 0.8705680108988676,
           "ci_95_hi": 0.8747103489575625,
-          "ci_width": 0.0041423380586950165
+          "ci_width": 0.0041423380586949055
         }
       }
     },
@@ -430,20 +448,21 @@
       "b_name": "Semiprime",
       "n_samples": 100000,
       "is_deterministic": false,
+      "is_trivial": false,
       "distribution": {
         "1": {
           "count": 2382,
           "probability": 0.02382,
-          "ci_95_lo": 0.022883716761205684,
+          "ci_95_lo": 0.022883716761205694,
           "ci_95_hi": 0.02478404002745872,
-          "ci_width": 0.0019003232662530359
+          "ci_width": 0.0019003232662530255
         },
         "5": {
           "count": 11867,
           "probability": 0.11867,
-          "ci_95_lo": 0.11667166360766247,
+          "ci_95_lo": 0.11667166360766244,
           "ci_95_hi": 0.12069048277039868,
-          "ci_width": 0.004018819162736206
+          "ci_width": 0.004018819162736234
         },
         "6": {
           "count": 85751,
@@ -461,20 +480,21 @@
       "b_name": "Multiprime",
       "n_samples": 100000,
       "is_deterministic": false,
+      "is_trivial": false,
       "distribution": {
         "1": {
           "count": 5563,
           "probability": 0.05563,
-          "ci_95_lo": 0.054217297669030655,
-          "ci_95_hi": 0.057068544743444534,
+          "ci_95_lo": 0.05421729766903066,
+          "ci_95_hi": 0.05706854474344454,
           "ci_width": 0.002851247074413879
         },
         "2": {
           "count": 6510,
           "probability": 0.0651,
-          "ci_95_lo": 0.06357858133628472,
+          "ci_95_lo": 0.0635785813362847,
           "ci_95_hi": 0.06664670203804164,
-          "ci_width": 0.003068120701756924
+          "ci_width": 0.003068120701756938
         },
         "5": {
           "count": 27884,
@@ -499,6 +519,7 @@
       "b_name": "Dyadic",
       "n_samples": 100000,
       "is_deterministic": true,
+      "is_trivial": true,
       "distribution": {
         "5": {
           "count": 100000,
@@ -516,6 +537,7 @@
       "b_name": "Triadic",
       "n_samples": 100000,
       "is_deterministic": true,
+      "is_trivial": true,
       "distribution": {
         "2": {
           "count": 100000,
@@ -533,6 +555,7 @@
       "b_name": "Semiprime",
       "n_samples": 100000,
       "is_deterministic": false,
+      "is_trivial": false,
       "distribution": {
         "1": {
           "count": 8432,
@@ -544,9 +567,9 @@
         "2": {
           "count": 3572,
           "probability": 0.03572,
-          "ci_95_lo": 0.03457819733580379,
-          "ci_95_hi": 0.036888832319446556,
-          "ci_width": 0.0023106349836427634
+          "ci_95_lo": 0.0345781973358038,
+          "ci_95_hi": 0.03688883231944655,
+          "ci_width": 0.0023106349836427495
         },
         "5": {
           "count": 26330,
@@ -571,6 +594,7 @@
       "b_name": "Multiprime",
       "n_samples": 100000,
       "is_deterministic": false,
+      "is_trivial": false,
       "distribution": {
         "1": {
           "count": 2248,
@@ -582,8 +606,8 @@
         "2": {
           "count": 5983,
           "probability": 0.05983,
-          "ci_95_lo": 0.05836780432722686,
-          "ci_95_hi": 0.06131778985135014,
+          "ci_95_lo": 0.05836780432722685,
+          "ci_95_hi": 0.061317789851350134,
           "ci_width": 0.0029499855241232817
         },
         "5": {
@@ -597,8 +621,8 @@
           "count": 70566,
           "probability": 0.70566,
           "ci_95_lo": 0.7028243762914581,
-          "ci_95_hi": 0.7084836910783747,
-          "ci_width": 0.005659314786916614
+          "ci_95_hi": 0.7084836910783746,
+          "ci_width": 0.005659314786916503
         }
       }
     },
@@ -609,6 +633,7 @@
       "b_name": "Triadic",
       "n_samples": 100000,
       "is_deterministic": true,
+      "is_trivial": true,
       "distribution": {
         "5": {
           "count": 100000,
@@ -626,27 +651,28 @@
       "b_name": "Semiprime",
       "n_samples": 100000,
       "is_deterministic": false,
+      "is_trivial": false,
       "distribution": {
         "1": {
           "count": 2468,
           "probability": 0.02468,
-          "ci_95_lo": 0.023727205379898163,
-          "ci_95_hi": 0.02566049798632981,
-          "ci_width": 0.0019332926064316476
+          "ci_95_lo": 0.023727205379898166,
+          "ci_95_hi": 0.025660497986329817,
+          "ci_width": 0.001933292606431651
         },
         "2": {
           "count": 2494,
           "probability": 0.02494,
-          "ci_95_lo": 0.023982274716286577,
+          "ci_95_lo": 0.02398227471628658,
           "ci_95_hi": 0.025925412535223583,
-          "ci_width": 0.001943137818937006
+          "ci_width": 0.0019431378189370026
         },
         "5": {
           "count": 18134,
           "probability": 0.18134,
           "ci_95_lo": 0.1789561989482002,
-          "ci_95_hi": 0.18374229797849656,
-          "ci_width": 0.004786099030296365
+          "ci_95_hi": 0.1837422979784966,
+          "ci_width": 0.004786099030296392
         },
         "6": {
           "count": 76904,
@@ -664,19 +690,20 @@
       "b_name": "Multiprime",
       "n_samples": 100000,
       "is_deterministic": false,
+      "is_trivial": false,
       "distribution": {
         "1": {
           "count": 6385,
           "probability": 0.06385,
-          "ci_95_lo": 0.06234235649452075,
-          "ci_95_hi": 0.06538300053972107,
-          "ci_width": 0.0030406440452003178
+          "ci_95_lo": 0.06234235649452076,
+          "ci_95_hi": 0.06538300053972106,
+          "ci_width": 0.003040644045200297
         },
         "2": {
           "count": 6407,
           "probability": 0.06407,
-          "ci_95_lo": 0.06255992018049582,
-          "ci_95_hi": 0.06560542388703222,
+          "ci_95_lo": 0.0625599201804958,
+          "ci_95_hi": 0.06560542388703221,
           "ci_width": 0.003045503706536404
         },
         "5": {
@@ -702,20 +729,21 @@
       "b_name": "Semiprime",
       "n_samples": 100000,
       "is_deterministic": false,
+      "is_trivial": false,
       "distribution": {
         "1": {
           "count": 2299,
           "probability": 0.02299,
-          "ci_95_lo": 0.02206995860975814,
-          "ci_95_hi": 0.023937849924558035,
-          "ci_width": 0.0018678913147998945
+          "ci_95_lo": 0.022069958609758147,
+          "ci_95_hi": 0.02393784992455803,
+          "ci_width": 0.001867891314799884
         },
         "2": {
           "count": 2308,
           "probability": 0.02308,
-          "ci_95_lo": 0.022158182409264076,
+          "ci_95_lo": 0.022158182409264073,
           "ci_95_hi": 0.024029620504701938,
-          "ci_width": 0.001871438095437862
+          "ci_width": 0.0018714380954378655
         },
         "5": {
           "count": 15683,
@@ -740,13 +768,14 @@
       "b_name": "Multiprime",
       "n_samples": 100000,
       "is_deterministic": false,
+      "is_trivial": false,
       "distribution": {
         "1": {
           "count": 5504,
           "probability": 0.05504,
           "ci_95_lo": 0.053634426841460484,
-          "ci_95_hi": 0.05647145048557348,
-          "ci_width": 0.002837023644112993
+          "ci_95_hi": 0.05647145048557347,
+          "ci_width": 0.002837023644112986
         },
         "2": {
           "count": 5382,
@@ -778,19 +807,20 @@
       "b_name": "Multiprime",
       "n_samples": 100000,
       "is_deterministic": false,
+      "is_trivial": false,
       "distribution": {
         "1": {
           "count": 3845,
           "probability": 0.03845,
-          "ci_95_lo": 0.03726666082059169,
+          "ci_95_lo": 0.0372666608205917,
           "ci_95_hi": 0.03966020456212783,
-          "ci_width": 0.002393543741536136
+          "ci_width": 0.002393543741536129
         },
         "2": {
           "count": 3751,
           "probability": 0.03751,
-          "ci_95_lo": 0.03634077056140727,
-          "ci_95_hi": 0.038706151309983186,
+          "ci_95_lo": 0.03634077056140726,
+          "ci_95_hi": 0.03870615130998318,
           "ci_width": 0.002365380748575917
         },
         "5": {

@@ -30,7 +30,7 @@ python -m pytest experiments/tests/ -v
 ### Internal
 | Module                    | Provides                                                             | Used by        |
 |---------------------------|----------------------------------------------------------------------|----------------|
-| shared/spectral_matrix.py | classify, CLASS_NAME, MUL_TABLE, class_pow, SpectralAddress, BASIS   | 14 of 18 tests |
+| shared/spectral_matrix.py | classify, CLASS_NAME, MUL_TABLE, class_pow, SpectralAddress, BASIS   | 15 of 19 tests |
 
 ### C++ (for exp_hw_bench_cpp20)
 | Requirement | Version |
@@ -45,7 +45,8 @@ python -m pytest experiments/tests/ -v
 | ID     | Name                                    | Test file                                       | Result file                            | Uses spectral_matrix |
 |--------|-----------------------------------------|-------------------------------------------------|----------------------------------------|:--------------------:|
 | 00.0   | SpectralMemory benchmark proof          | tests/test_exp_00_0_benchmark_proof.py          | exp_00_0_benchmark_proof.json          | no                   |
-| 01.0   | Maximality of 7-class partition         | tests/test_exp_01_0_maximality.py               | exp_01_0_maximality.json               | yes                  |
+| 01.0   | Maximality of 7-class partition (illustrative) | tests/test_exp_01_0_maximality.py        | exp_01_0_maximality.json               | yes                  |
+| 01.0b  | Partition-lattice enumeration (Bell(7)=877)    | tests/test_exp_01_0b_partition_lattice.py | exp_01_0b_partition_lattice.json      | yes                  |
 | 01.1   | Omega-function complete additivity      | tests/test_exp_01_1_omega_additivity.py         | exp_01_1_omega_additivity.json         | yes                  |
 | 01.2   | Prime residue classes mod 6             | tests/test_exp_01_2_prime_residues.py           | exp_01_2_prime_residues.json           | yes                  |
 | 02.1   | Partition completeness                  | tests/test_exp_02_1_partition_completeness.py   | exp_02_1_partition_completeness.json   | yes                  |
@@ -82,12 +83,24 @@ five tests: context scaling (T=128-1024), latency scaling, memory scaling,
 infinite retrieval (10K-500K distance), and sliding window comparison.
 Requires PyTorch; imports from `hw_verification/exp_hw_exact_spectral.py`.
 
-### E01.0 -- Maximality of 7-class partition
-Proves that the 7-class partition {S0..S6} is the finest partition of N for
-which cl(a*b) depends only on cl(a) and cl(b) while preserving deterministic
-additive laws. Three-step proof: multiplicative equivalence of S1-S4, additive
-distinction of S1 vs S2, and impossibility of refining S5.
-References P1 Proposition 4.8.
+### E01.0 -- Maximality of 7-class partition (illustrative)
+Three-step argument for the maximality of the 7-class partition
+{S0..S6}: multiplicative equivalence of S1-S4, additive distinction of
+S1 vs S2, and vacuity of S5/S6 splits. Serves as didactic proof; the
+rigorous exhaustive version is E01.0b. References paper Theorem
+thm:maximality.
+
+### E01.0b -- Exhaustive partition-lattice enumeration
+Enumerates all Bell(7)=877 set partitions of the ground set {S0..S6}
+via restricted-growth-string recursion and verifies two quotient
+conditions per partition: (i) otimes-closure (well-definedness of the
+induced multiplication) and (ii) preservation of all 7 deterministic
+addition laws from paper Table tab:7laws. Result: 68 partitions are
+otimes-closed, 7 preserve all laws, and these 7 form a chain with the
+identity 7-partition as the unique maximal (finest) element.
+Empirical output-class sets per 28-pair are loaded from
+exp_10_0_addition_ci.json. Runtime approx 0.06s.
+References paper Theorem thm:maximality.
 
 ### E01.1 -- Omega-function complete additivity
 Verifies Omega(a*b) = Omega(a) + Omega(b) for 100,000 random pairs from
@@ -161,8 +174,12 @@ References P1 Section 2.2.
 
 ### E10.0 -- Addition laws with 95% CI
 Reports all 28 symmetric class-addition pair distributions with 95%
-binomial confidence intervals at N=100K sample size.
-References P1 Section 5.3.
+binomial confidence intervals at N=100K sample size. Each pair carries
+an `is_trivial` flag (set when at least one operand is a singleton
+class S0={1}, S3={2}, S4={3}; paper Definition def:trivial-det).
+Summary split: 1 non-trivial + 6 trivial (= 7 deterministic) + 21
+probabilistic.
+References paper Section 4 (Theorem thm:7laws, Table tab:7laws).
 
 ### ES0.S2 -- S0+S2 non-determinism proof
 Demonstrates that S0+S2 is not mathematically deterministic by providing
@@ -204,9 +221,9 @@ Uses 10 basis primes (2..29) with full p-adic valuations.
 
 ## Notes
 
-1. **Unified interface**: 18 of 20 experiments are pytest tests. Each test generates its result JSON via `if __name__ == "__main__"`.
+1. **Unified interface**: 19 of 21 experiments are pytest tests. Each test generates its result JSON via `if __name__ == "__main__"`.
 2. **Exceptions**: `hw.exact` runs as a standalone HW verification (torch-free). `hw.bench` is C++20.
 3. **hw_verification**: `exp_hw_exact_spectral.py` (PyTorch) is the reference implementation. `exp_hw_exact_nontorch.py` is the CI verifier.
 4. **sympy**: Only `test_exp_04_1` requires sympy. All other tests run with stdlib + spectral_matrix.
 5. **scipy**: Several tests use scipy for confidence interval computation but include fallback code when scipy is absent.
-6. **Result files**: All 20 result JSON files are present in `experiments/results/`.
+6. **Result files**: All 21 result JSON files are present in `experiments/results/`.

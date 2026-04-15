@@ -32,3 +32,7 @@ Desktop.ini
 # IDE
 .vscode/
 .idea/
+
+# Debugging reports
+reports/
+docs/reports/

@@ -5,8 +5,9 @@
 A Seven-Class Partition, Prime Coordinate Representation, and Deterministic Addition Laws**
 
 **Authors:** Prime-Spectrum-Team
-**Version:** 1.1 (April 10, 2026)
+**Version:** 1.2 (April 16, 2026)
 **Venue:** TechRxiv (IEEE preprint)
+**Archive (Zenodo, Concept DOI — always latest version):** [10.5281/zenodo.19511136](https://doi.org/10.5281/zenodo.19511136)
 
 ---
 
@@ -52,11 +53,10 @@ experiments/
   conftest.py                      <- pytest configuration
   shared/spectral_matrix.py        <- Core library (classify, MUL_TABLE, SpectralAddress)
   scripts/exp_hw_bench_cpp20.cpp   <- C++20 benchmark
-  results/                         <- All result JSONs (20 files)
-  tests/                           <- pytest-compatible test files (18 tests)
+  results/                         <- All result JSONs (21 files)
+  tests/                           <- pytest-compatible test files (19 tests)
   hw_verification/                 <- HW emulation (PyTorch + torch-free)
 
-INVENTION_DISCLOSURE_PrimeSpectrum.pdf  <- Signed invention disclosure
 README.md                          <- This document
 ```
 
@@ -89,12 +89,13 @@ Classifies any natural number, shows its SpectralAddress, Cayley table, and reso
 
 ## Experiment Status
 
-### pytest Tests (18 experiments)
+### pytest Tests (19 experiments)
 
 | ID    | Experiment                        | Test file                                 | Status | Paper Ref |
 |-------|-----------------------------------|-------------------------------------------|--------|-----------|
 | 00.0  | SpectralMemory benchmark proof    | test_exp_00_0_benchmark_proof.py          | PASS   | (P2)      |
-| 01.0  | Maximality of 7-class partition   | test_exp_01_0_maximality.py               | PASS   | Sec 3     |
+| 01.0  | Maximality of 7-class partition (illustrative) | test_exp_01_0_maximality.py    | PASS   | Sec 3     |
+| 01.0b | Partition-lattice enumeration (Bell(7)=877) | test_exp_01_0b_partition_lattice.py | PASS | Sec 3     |
 | 01.1  | Omega-function complete additivity| test_exp_01_1_omega_additivity.py         | PASS   | Sec 2     |
 | 01.2  | Prime residue classes mod 6       | test_exp_01_2_prime_residues.py           | PASS   | Sec 2     |
 | 02.1  | Partition completeness            | test_exp_02_1_partition_completeness.py   | PASS   | Sec 3 C1  |
@@ -150,6 +151,20 @@ cd paper && pdflatex 20260401_PrimeSpectrum.tex
 | torch   | >=2.0    | test_exp_00_0, hw_verification (optional)    |
 | sympy   | >=1.12   | test_exp_04_1 (Solar+Lunar)                  |
 | scipy   | optional | CI computation in several tests (fallback if absent) |
+
+---
+
+## Third-Party Datasets
+
+Experiment E0.0 (SpectralMemory benchmark) downloads and uses:
+
+- **Tiny Shakespeare** — concatenated works of William Shakespeare (public domain
+  text) packaged and distributed by Andrej Karpathy under the MIT License as part
+  of the [char-rnn](https://github.com/karpathy/char-rnn) repository.
+  The file is fetched at benchmark runtime from
+  `https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt`
+  and is **not redistributed** as part of this repository. See [`NOTICE`](NOTICE)
+  for the full attribution and MIT permission notice.
 
 ---
 

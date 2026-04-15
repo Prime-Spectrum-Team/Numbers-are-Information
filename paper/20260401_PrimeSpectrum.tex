@@ -75,12 +75,18 @@ Representation, and Deterministic Addition Laws}}
 
 \author{Prime-Spectrum-Team}
 
-\date{Version 1.1 --- April 10, 2026}
+\date{Version 1.2 --- April 16, 2026}
 
 %% ════════════════════════════════════════════════════════════════════════════
 \begin{document}
 
 \maketitle
+
+\begin{center}
+\small
+Archived on Zenodo (Concept DOI, always resolves to latest version):\\
+\href{https://doi.org/10.5281/zenodo.19511136}{\texttt{doi.org/10.5281/zenodo.19511136}}
+\end{center}
 
 \begin{abstract}
 The natural numbers are conventionally treated as ordered magnitudes.
@@ -371,41 +377,53 @@ where the last equality uses associativity of integer multiplication.
 By the symmetric argument, $C_1 \otimes (C_2 \otimes C_3) = \cl(a \cdot (b \cdot c))$. \qed
 \end{proof}
 
-\begin{theorem}[Completeness of the 7-class partition]
+\begin{theorem}[Maximality of the 7-class partition]
 \label{thm:maximality}
-The classification $\cl$ exhausts all distinctions available from the two
-invariants $\Om(n)$ and $p \bmod 6$:
+Among all set partitions of $\{S_0,\dots,S_6\}$, the identity
+partition (7 blocks) is the unique \emph{maximal} element
+(in the refinement order) satisfying both
 \begin{enumerate}[noitemsep, topsep=2pt]
-\item \emph{Closure:} The partition is closed under the induced
-      multiplication $\otimes$ (Theorem~\ref{thm:welldef}).
-\item \emph{Completeness:} The decision tree branches on three levels:
-      (i)~$\Om$-depth ($0, 1, 2, \geq 3$), (ii)~singleton status
-      ($n=1,2,3$), and (iii)~residue mod~6 for primes $>3$. Since
-      $\Om$-depth is already separated into all distinguishable strata
-      and mod-6 residues admit exactly two prime classes ($1$ and $5$),
-      no finer partition is possible within these invariants.
-\item \emph{Necessity of each class:} Merging $S_1$ and $S_2$ destroys
-      the deterministic addition law $S_1 + S_2 \to S_6$
-      (Theorem~\ref{thm:solar-lunar}); merging $S_3$ or $S_4$ into a
-      generic prime class removes the singleton property that forces the
-      six trivially deterministic addition laws.
+\item[(i)] \emph{$\otimes$-closure:} for every pair of blocks
+      $(B, B')$, the set $\{\cl(a b) : a \in B, b \in B'\}$ lies in a
+      single block (well-definedness of the induced multiplication,
+      Theorem~\ref{thm:welldef});
+\item[(ii)] \emph{Preservation of the 7 deterministic addition laws}
+      of Table~\ref{tab:7laws}: each law $\{S_i, S_j\} \to S_k$
+      remains deterministic under the quotient, with output block
+      $[S_k]$.
 \end{enumerate}
-\emph{Note:} In the multiplicative direction alone, the four prime classes
-$S_1, S_2, S_3, S_4$ are equivalent (identical rows in
-Table~\ref{tab:cayley}), so a 4-element quotient
-$\{S_0, S_\mathrm{prime}, S_5, S_6\}$ suffices. The full 7-class
-refinement is necessary only when addition laws are considered.
+Equivalently, no refinement of the 7-class partition exists within the
+invariants $(\Om, p \bmod 6)$, and every strict coarsening either
+violates (i) or loses at least one deterministic addition law.
 \end{theorem}
+
 \begin{proof}
-Property~(1) holds by Theorem~\ref{thm:welldef}.
-Property~(2) follows from the exhaustive case analysis: the three
-branching levels yield exactly $3 + 2 + 2 = 7$ leaf classes, with no
-further splitting possible.
-Property~(3): $p + q \equiv 0 \pmod{6}$ in
-Theorem~\ref{thm:solar-lunar} requires $p \equiv 1$ and $q \equiv 5$ (or
-vice versa); collapsing $S_1, S_2$ eliminates this distinction.
-Collapsing $S_3$ or $S_4$ eliminates the singleton sums. \qed
+(i) is Theorem~\ref{thm:welldef}; for the identity partition, (ii)
+holds by inspection of Table~\ref{tab:7laws}.
+For the converse, we enumerate all $\mathrm{Bell}(7)=877$ partitions of
+$\{S_0,\dots,S_6\}$ exhaustively (experiment E1.0b): exactly
+$7$ partitions satisfy both (i) and (ii), and these form a single
+chain in the refinement order
+\[
+\pi_1 \prec \pi_2 \prec \pi_3 \prec \pi_4 \prec \pi_5 \prec \pi_6 \prec
+\pi_7
+\]
+with $\pi_7$ the identity. In particular $\pi_7$ is the unique maximal
+element; every strict coarsening (any of $\pi_1,\dots,\pi_6$, or any
+of the remaining $870$ partitions) either fails (i) or collapses at
+least one deterministic addition law of Table~\ref{tab:7laws}.
+Full data in \texttt{results/exp\_01\_0b\_partition\_lattice.json}. \qed
 \end{proof}
+
+\emph{Remark (multiplication-only sub-quotient).}
+In the multiplicative direction alone, the four prime classes
+$S_1,S_2,S_3,S_4$ share identical Cayley rows, so the $\otimes$-closed
+$4$-element quotient $\{S_0, S_\mathrm{prime}, S_5, S_6\}$ also
+exists. It appears in the enumeration above as a $\otimes$-closed
+partition that is \emph{not} among the $7$ chain elements: it collapses
+$S_3{+}S_3 \to S_5$ and $S_1{+}S_1 \not\to$\,constant into the same
+block pair, violating (ii). The full 7-class refinement is therefore
+necessary precisely when addition laws are considered.
 
 \subsection{Power Dynamics}
 
@@ -461,33 +479,45 @@ deterministic} if $\cl(n_1 + n_2) = C_3$ for \textbf{all}
 $n_1 \in C_1$, $n_2 \in C_2$ without exception.
 \end{definition}
 
-\begin{theorem}[The 7 deterministic addition laws]\label{thm:7laws}
-Exactly 7 unordered class pairs yield a deterministic result (Table~\ref{tab:7laws}).
+\begin{definition}[Trivial vs.\ non-trivial determinism]\label{def:trivial-det}
+A deterministic addition law $\{C_1, C_2\} \to C_3$ is \emph{trivial}
+if at least one of $C_1, C_2$ is a singleton class
+($S_0{=}\{1\}$, $S_3{=}\{2\}$, or $S_4{=}\{3\}$),
+in which case determinism reduces to an arithmetic identity between
+two fixed integers. Otherwise both operand classes are infinite and
+determinism is an emergent statistical property; such laws are called
+\emph{non-trivial}.
+\end{definition}
+
+\begin{theorem}[Deterministic addition laws]\label{thm:7laws}
+Among the $\binom{7}{2}+7=28$ unordered class pairs, exactly
+\textbf{one non-trivial} and \textbf{six trivial} deterministic
+addition laws exist (Definition~\ref{def:trivial-det},
+Table~\ref{tab:7laws}). The unique non-trivial law is Solar$+$Lunar
+(Theorem~\ref{thm:solar-lunar}).
 \end{theorem}
 
 \begin{table}[htbp]
 \centering
-\caption{The 7 deterministic addition laws.}\label{tab:7laws}
+\caption{The 7 deterministic addition laws, split by
+Definition~\ref{def:trivial-det}.}\label{tab:7laws}
 \small
 \setlength{\tabcolsep}{3pt}
-\begin{tabular}{@{}lll p{2.8cm}@{}}
+\begin{tabular}{@{}llllp{2.4cm}@{}}
 \toprule
-$C_1$ & $C_2$ & Result & Justification \\
+$C_1$ & $C_2$ & Result & Type & Justification \\
 \midrule
-$S_0$ & $S_0$ & $S_3$ & $1+1=2$ (singleton) \\
-$S_0$ & $S_3$ & $S_4$ & $1+2=3$ (singleton) \\
-$S_0$ & $S_4$ & $S_5$ & $1+3=4=2^2$ (singleton) \\
-$S_3$ & $S_3$ & $S_5$ & $2+2=4=2^2$ (singleton) \\
-$S_3$ & $S_4$ & $S_2$ & $2+3=5$ (Lunar, singleton) \\
-$S_4$ & $S_4$ & $S_5$ & $3+3=6=2{\times}3$ (singleton) \\
-$\mathbf{S_1}$ & $\mathbf{S_2}$ & $\mathbf{S_6}$ & \textbf{Thm.~\ref{thm:solar-lunar}} \\
+$S_0$ & $S_0$ & $S_3$ & trivial     & $1+1=2$ \\
+$S_0$ & $S_3$ & $S_4$ & trivial     & $1+2=3$ \\
+$S_0$ & $S_4$ & $S_5$ & trivial     & $1+3=4=2^2$ \\
+$S_3$ & $S_3$ & $S_5$ & trivial     & $2+2=4=2^2$ \\
+$S_3$ & $S_4$ & $S_2$ & trivial     & $2+3=5$ (Lunar) \\
+$S_4$ & $S_4$ & $S_5$ & trivial     & $3+3=6=2{\times}3$ \\
+$\mathbf{S_1}$ & $\mathbf{S_2}$ & $\mathbf{S_6}$ & \textbf{non-trivial} &
+\textbf{Thm.~\ref{thm:solar-lunar}} \\
 \bottomrule
 \end{tabular}
 \end{table}
-
-\emph{Note.} The first six laws are deterministic because
-$S_0=\{1\}$, $S_3=\{2\}$, $S_4=\{3\}$ are singletons. The seventh is
-the unique non-trivially deterministic law.
 
 \emph{Count.} There are $\binom{7}{2}+7=28$ unordered class pairs.
 Non-determinism of each of the remaining 21 is established by explicit
@@ -710,10 +740,19 @@ experiments are listed in the repository's \texttt{EXPERIMENT\_INDEX.md}.
 
 \begin{itemize}[noitemsep, topsep=2pt]
 \item E0.0 (SpectralMemory benchmark): 2-layer, 4-head architecture on
-      TinyShakespeare; 5 tests (context scaling, latency, memory,
+      TinyShakespeare~\cite{Karpathy2015CharRNN}; 5 tests (context scaling, latency, memory,
       infinite retrieval, sliding-window comparison); see Section~\ref{subsec:structural}
-\item E1.0 (Maximality of 7-class partition): confirmed that all 7 classes
-      are necessary and no finer $\Om$/mod-6 partition exists
+\item E1.0 (Maximality of 7-class partition, illustrative): confirmed
+      via three-step argument (multiplicative equivalence of
+      $S_1{\equiv}S_2{\equiv}S_3{\equiv}S_4$, additive
+      $S_1 \not\equiv S_2$, vacuity of $S_5/S_6$ splits)
+\item E1.0b (Maximality of 7-class partition, exhaustive): all
+      $\mathrm{Bell}(7){=}877$ set partitions of
+      $\{S_0,\dots,S_6\}$ enumerated; 68 are
+      $\otimes$-closed, 7 preserve all 7 (1 non-trivial + 6 trivial,
+      Definition~\ref{def:trivial-det}) deterministic addition laws,
+      and these form a chain with the identity 7-partition as the
+      unique maximum (Theorem~\ref{thm:maximality})
 \item E1.1 ($\Om$-additivity): 100{,}000 random pairs, rate 1.0
 \item E1.2 (Prime residues mod~6): all 664{,}579 primes below $10^7$
 \item E2.1 (Partition completeness): verified exhaustive coverage
@@ -723,18 +762,22 @@ experiments are listed in the repository's \texttt{EXPERIMENT\_INDEX.md}.
 \item E4.1 (Solar+Lunar, \texttt{sympy}): 90{,}000 pairs, zero exceptions
 \item E5.1 (SA bijection): 10{,}000 round-trips, zero failures
 \item E5.2 (SA isomorphisms): 40{,}000 tests, 100\% pass rate
-\item E5.3a (Classification recovery from SA): 56{,}282 $\B$-smooth
-      integers from 100{,}000 samples; $\cl(n)$ via direct factorization
-      agrees with $\cl$ recovered from $\SA(n)$ in 100\% of cases
-      (0 disagreements)
+\item E5.3a (Classification recovery from SA): 100{,}000 randomly
+      generated $\B$-smooth values (basis $\{2,3,5,7,11,13,17\}$,
+      exponents $0$--$4$) yielded 56{,}282 distinct integers
+      (birthday collisions due to finite sample space $5^7{=}78{,}125$);
+      $\cl(n)$ via direct factorization agrees with $\cl$ recovered from
+      $\SA(n)$ in 100\% of cases (0 disagreements on all 56{,}282
+      unique values)
 \item E5.3b ($\B$-smooth boundary): bijection breaks at $n=19$
       (first prime ${>}\max(\B)$); $\B$-smooth fraction decays from
       28.7\% at $N{=}1{,}000$ to 9.45\% at $N{=}10{,}000$ to 2.58\%
       at $N{=}100{,}000$
 \item E6.2 (Resonance hierarchy): 2{,}203{,}950 pairs at $T=2{,}100$
 \item E7.1 (Cayley table): 200 pairs/entry (9{,}800 total), zero deviations
-\item E10.0 (All 28 addition laws): 100{,}000 pairs each, 7 deterministic
-      confirmed, 21 non-deterministic with witnesses
+\item E10.0 (All 28 addition laws): 100{,}000 pairs each; 1 non-trivial
+      and 6 trivial (singleton-induced) deterministic laws confirmed,
+      21 probabilistic with explicit witnesses
 \end{itemize}
 
 \subsection{C++20 High-Performance Implementation}
@@ -751,7 +794,7 @@ Operation & Throughput & Complexity \\
 $\cl(n)$ classification & 0.84\,M ops/s   & $O(\sqrt{n})$ \\
 Cayley lookup           & 475\,M ops/s$^{a}$ & $O(1)$ \\
 SA computation          & 19.9\,M ops/s$^{b}$ & $O(K)$ \\
-SA GCD                  & 10.7\,M ops/s$^{c}$ & $O(K)$ \\
+SA GCD                  & 1{,}140\,M ops/s$^{c}$ & $O(K)$ \\
 SA round-trip           & 10{,}000/10{,}000 & --- \\
 \bottomrule
 \end{tabular}
@@ -760,10 +803,14 @@ SA round-trip           & 10{,}000/10{,}000 & --- \\
 \noindent{\small
 $^{a}$ Precomputed class indices; 559.9\,M ops/s on AMD Ryzen~9~3900
 (GCC~14.2, \texttt{-O3 -march=native}).\\
-$^{b}$ Includes trial division over $K=7$ basis primes.\\
-$^{c}$ Standalone component-wise min on precomputed vectors; combined
-SA-compute+GCD limited by $^{b}$. GCD step alone exceeds 1{,}000\,M
-ops/s on precomputed vectors (AMD Ryzen~9~3900, verified).
+$^{b}$ Includes trial division over $K=7$ basis primes; reference value
+measured on Intel Core~i5. Reproduction on AMD Ryzen~9~3900 (2~cores in
+container, GCC~14.2, \texttt{-O3 -march=native}) yields 16.0\,M ops/s
+(within hardware variance, single-core throughput-bound).\\
+$^{c}$ Component-wise minimum on \emph{precomputed} SA vectors (memory-bandwidth-bound,
+$K{=}7$ component-wise min); measured 1{,}140.3\,M ops/s on AMD Ryzen~9~3900
+(GCC~14.2, \texttt{-O3 -march=native}). Combined SA-compute+GCD is bounded by
+the $O(K)$ trial-division in $^{b}$; the GCD step itself is near memory bandwidth.
 }
 
 \smallskip
@@ -972,7 +1019,7 @@ Result & Statement & Status \\
 Monoid            & Finite comm.\ monoid       & Proved \\
 Cayley table      & 49 entries verified         & Proved+ver. \\
 Universality      & $n{>}1$ reaches $S_6$      & Proved+ver. \\
-7 add.\ laws      & Exact, deterministic       & Proved \\
+7 add.\ laws      & 1 non-triv.\ + 6 triv.\ det.\ & Proved \\
 Solar+Lunar       & $S_1+S_2 \to S_6$          & Proved \\
 SpectralAddress   & 4 isom., $O(K)$            & Proved+ver. \\
 Resonance         & $6/\pi^2$ non-res.         & Proved+ver. \\
@@ -1063,6 +1110,16 @@ factors $> y$,''
 H. Iwaniec and E. Kowalski,
 \textit{Analytic Number Theory.}
 Amer.\ Math.\ Soc., 2004.
+
+\bibitem{Karpathy2015CharRNN}
+A. Karpathy,
+``char-rnn: Multi-layer Recurrent Neural Networks for character-level
+language models,'' GitHub repository, 2015, MIT License.
+\url{https://github.com/karpathy/char-rnn}.
+The Tiny Shakespeare corpus used in experiment~E0.0 (underlying text in
+the public domain; concatenation distributed under the MIT License) is
+retrieved from this repository at runtime and is not redistributed with
+this work.
 
 \end{thebibliography}
 
